@@ -1,28 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope } from "next/font/google";
+import { Inter_Tight, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { TrackingCapture } from "@/components/tracking";
+import { Effekte } from "@/components/effekte";
 import { JsonLd } from "@/components/faq";
 import { SITE } from "@/lib/site";
 
-const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font-manrope", display: "swap" });
+const sans = Inter_Tight({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-sans", display: "swap" });
+const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["italic", "normal"], variable: "--font-serif", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: { default: "Jobs im Vertrieb, auch für Quereinsteiger | machvertrieb.de", template: "%s | machvertrieb.de" },
   description: SITE.description,
   alternates: { canonical: "/" },
-  openGraph: { type: "website", locale: "de_DE", siteName: SITE.name, url: SITE.url, title: "Mach Vertrieb. Dein Einstieg in den Vertrieb", description: SITE.description },
+  openGraph: { type: "website", locale: "de_DE", siteName: SITE.name, url: SITE.url, title: "Mach Vertrieb. Wir finden den besten Vertrieb für dich", description: SITE.description },
   robots: { index: true, follow: true },
 };
 
-export const viewport: Viewport = { themeColor: "#ffffff", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#070707", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={manrope.variable}>
+    <html lang="de" className={`${sans.variable} ${serif.variable}`}>
       <body>
         <JsonLd
           data={{
@@ -34,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <TrackingCapture />
+        <Effekte />
         <Header />
         <main id="inhalt">{children}</main>
         <Footer />

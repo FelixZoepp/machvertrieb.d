@@ -25,13 +25,13 @@ export function Header() {
       <div className="wrap header__in">
         <Logo />
         <nav className="nav" aria-label="Hauptnavigation">
-          <Link href="/#vorteile">Vorteile</Link>
+          <Link href="/#prinzip">Prinzip</Link>
+          <Link href="/#felix">Felix</Link>
+          <Link href="/#sicherheit">Sicherheit</Link>
           <Link href="/#jobs">Jobs</Link>
-          <Link href="/#ablauf">So funktioniert&apos;s</Link>
           <Link href="/wissen">Ratgeber</Link>
-          <Link href="/#faq">FAQ</Link>
         </nav>
-        <Link href="/bewerben" className="btn btn--red btn--sm">Jetzt bewerben <Pfeil /></Link>
+        <Link href="/bewerben" className="btn btn--gold btn--sm">Match-Check <Pfeil /></Link>
       </div>
     </header>
   );

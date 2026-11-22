@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { leseTracking } from "./tracking";
 import { Pfeil } from "./icons";
 
@@ -12,27 +12,36 @@ type Frage = {
   multi?: boolean;
   zweispaltig?: boolean;
   optionen: Opt[];
-  /** Antwort, die nicht weiterführt (Vorqualifizierung) */
+  freitext?: { label: string; platzhalter: string };
   stopp?: { v: string; text: string };
 };
 
+// Frame: Wir suchen für dich das Beste raus. Jede Frage hilft beim Zuteilen zum passenden Vertrieb.
 const FRAGEN: Frage[] = [
   {
-    id: "motivation",
-    titel: "Was reizt dich am Vertrieb?",
-    hilfe: "Mehrfachauswahl möglich.",
-    multi: true,
+    id: "arbeitsstil",
+    titel: "Was ist dir wichtiger?",
+    hilfe: "Es gibt kein Richtig oder Falsch. Damit finden wir den Vertrieb, der zu deinem Stil passt.",
     optionen: [
-      { v: "verdienst", label: "Verdienst nach Leistung", emoji: "💶" },
-      { v: "freiheit", label: "Freie Zeiteinteilung", emoji: "🕒" },
-      { v: "menschen", label: "Mit Menschen arbeiten", emoji: "🤝" },
-      { v: "karriere", label: "Aufstieg und Führung", emoji: "📈" },
+      { v: "kleine_tickets", label: "Viele Abschlüsse, konstante Provision", emoji: "🔁", hint: "Kleinere Tickets, dafür viele Termine und regelmäßiges Einkommen" },
+      { v: "grosse_tickets", label: "Wenige, aber große Tickets", emoji: "💎", hint: "Weniger Termine, länger beim Kunden, hohe Provision pro Abschluss" },
+      { v: "mix", label: "Eine Mischung aus beidem", emoji: "⚖️" },
+    ],
+  },
+  {
+    id: "rolle",
+    titel: "Was willst du am liebsten machen?",
+    optionen: [
+      { v: "closer", label: "Nur closen", emoji: "🎯", hint: "Du bekommst Termine gestellt und schließt ab" },
+      { v: "full_cycle", label: "Kunden selbst finden und abschließen", emoji: "🚀", hint: "Alles in einer Hand, maximale Kontrolle" },
+      { v: "leads", label: "Leads generieren, ohne zu verkaufen", emoji: "🧲", hint: "Interessenten finden und Termine legen" },
+      { v: "abwechslung", label: "Abwechslung, gern alles", emoji: "🔀" },
     ],
   },
   {
     id: "branchen",
-    titel: "Welche Branche interessiert dich?",
-    hilfe: "Wähle alles, was für dich in Frage kommt.",
+    titel: "Welche Branchen reizen dich?",
+    hilfe: "Mehrfachauswahl möglich.",
     multi: true,
     zweispaltig: true,
     optionen: [
@@ -41,36 +50,71 @@ const FRAGEN: Frage[] = [
       { v: "Photovoltaik", label: "Photovoltaik", emoji: "☀️" },
       { v: "Versicherung & Finanzen", label: "Versicherung & Finanzen", emoji: "🛡️" },
       { v: "Immobilien", label: "Immobilien", emoji: "🏠" },
-      { v: "offen", label: "Egal, Hauptsache es passt", emoji: "✨" },
+      { v: "offen", label: "Egal, Hauptsache es lohnt sich", emoji: "✨" },
     ],
   },
   {
     id: "erfahrung",
     titel: "Wie viel Vertriebserfahrung hast du?",
     optionen: [
-      { v: "0", label: "Keine, ich steige quer ein", emoji: "🌱", hint: "Passt. Viele Vertriebe suchen genau das." },
+      { v: "0", label: "Keine, ich steige quer ein", emoji: "🌱", hint: "Kein Problem. Dafür gibt es die Masterclass." },
       { v: "0.5", label: "Weniger als 1 Jahr", emoji: "🚀" },
       { v: "2", label: "1 bis 3 Jahre", emoji: "💼" },
       { v: "4", label: "Mehr als 3 Jahre", emoji: "🏆" },
     ],
   },
   {
-    id: "umfang",
-    titel: "Wie möchtest du arbeiten?",
+    id: "abschluss",
+    titel: "Was ist dein höchster Abschluss?",
+    hilfe: "Manche Partner haben Vorgaben, zum Beispiel im Finanzbereich. So stellen wir dich nur dort vor, wo es passt.",
+    zweispaltig: true,
     optionen: [
-      { v: "vollzeit", label: "Vollzeit", emoji: "🔥" },
-      { v: "teilzeit", label: "Teilzeit", emoji: "⏳" },
-      { v: "nebenberuflich", label: "Nebenberuflich", emoji: "🌙", hint: "Abends oder am Wochenende" },
+      { v: "kein", label: "Kein Abschluss", emoji: "➖" },
+      { v: "hauptschule", label: "Hauptschulabschluss", emoji: "📗" },
+      { v: "realschule", label: "Realschule / MSA", emoji: "📘" },
+      { v: "abitur", label: "Abitur / Fachabitur", emoji: "📙" },
+      { v: "ausbildung", label: "Abgeschlossene Ausbildung", emoji: "🛠️" },
+      { v: "studium", label: "Studium", emoji: "🎓" },
     ],
   },
   {
-    id: "arbeitsort",
-    titel: "Wo arbeitest du am liebsten?",
+    id: "umfang",
+    titel: "Wie willst du arbeiten?",
+    hilfe: "Unsere Partner suchen Leute, die es ernst meinen. Nebenberufliche Stellen vermitteln wir nicht.",
     optionen: [
-      { v: "aussendienst", label: "Draußen bei den Leuten", emoji: "🚪", hint: "Haustür, Termine vor Ort" },
-      { v: "telefon", label: "Am Telefon, gern remote", emoji: "📞" },
-      { v: "beides", label: "Beides ist okay", emoji: "👍" },
+      { v: "vollzeit", label: "Vollzeit", emoji: "🔥", hint: "Volle Energie, volles Potenzial" },
+      { v: "teilzeit", label: "Teilzeit", emoji: "⏳" },
     ],
+  },
+  {
+    id: "wunschgehalt",
+    titel: "Wie viel willst du im Monat verdienen?",
+    hilfe: "Sei ehrlich zu dir. Wir suchen die Vertriebe raus, bei denen dein Ziel realistisch drin ist.",
+    zweispaltig: true,
+    optionen: [
+      { v: "bis_2500", label: "Bis 2.500 €", emoji: "💶" },
+      { v: "2500_4000", label: "2.500 bis 4.000 €", emoji: "💶" },
+      { v: "4000_6000", label: "4.000 bis 6.000 €", emoji: "💰" },
+      { v: "6000_10000", label: "6.000 bis 10.000 €", emoji: "💰" },
+      { v: "ueber_10000", label: "Mehr als 10.000 €", emoji: "🏆" },
+    ],
+  },
+  {
+    id: "wofuer",
+    titel: "Und wofür? Was ist dein Warum?",
+    hilfe: "Geld ist nie das eigentliche Ziel. Wer sein Warum kennt, hält auch schwere Tage durch. Mehrfachauswahl möglich.",
+    multi: true,
+    zweispaltig: true,
+    optionen: [
+      { v: "familie", label: "Meine Familie absichern", emoji: "👨‍👩‍👧" },
+      { v: "zuhause", label: "Eigene Wohnung oder Haus", emoji: "🏡" },
+      { v: "schulden", label: "Schulden loswerden", emoji: "🔓" },
+      { v: "freiheit", label: "Freiheit und Reisen", emoji: "✈️" },
+      { v: "lifestyle", label: "Auto und Lifestyle", emoji: "🏎️" },
+      { v: "business", label: "Eigenes Business aufbauen", emoji: "🏢" },
+      { v: "beweisen", label: "Mir selbst was beweisen", emoji: "💪" },
+    ],
+    freitext: { label: "Erzähl uns mehr (optional)", platzhalter: "Was würdest du mit dem Geld als Erstes machen?" },
   },
   {
     id: "mobilitaet",
@@ -78,7 +122,7 @@ const FRAGEN: Frage[] = [
     optionen: [
       { v: "auto", label: "Führerschein und eigenes Auto", emoji: "🚗" },
       { v: "fuehrerschein", label: "Führerschein, aber kein Auto", emoji: "🪪" },
-      { v: "keiner", label: "Keinen Führerschein", emoji: "🚲" },
+      { v: "keiner", label: "Keinen Führerschein", emoji: "🚆" },
     ],
   },
   {
@@ -107,7 +151,7 @@ const FRAGEN: Frage[] = [
       { v: "ja", label: "Ja", emoji: "✅" },
       { v: "nein", label: "Nein", emoji: "✋" },
     ],
-    stopp: { v: "nein", text: "Danke für dein Interesse! Unsere Partner stellen nur Bewerber ab 18 Jahren ein. Komm gern wieder, sobald es so weit ist." },
+    stopp: { v: "nein", text: "Danke für dein Interesse! Unsere Partner stellen nur ab 18 Jahren ein. Komm gern wieder, sobald es so weit ist." },
   },
 ];
 
@@ -119,6 +163,8 @@ const UMKREIS = [
   { v: "999", label: "Deutschlandweit / remote" },
 ];
 
+const LADER_SCHRITTE = ["Profil wird ausgewertet", "Partner in deiner Region werden geprüft", "Passende Vertriebe werden ausgewählt"];
+
 const plus = (tage: number) => {
   const d = new Date();
   d.setDate(d.getDate() + tage);
@@ -126,31 +172,49 @@ const plus = (tage: number) => {
 };
 
 type Kontakt = { vorname: string; nachname: string; telefon: string; email: string; website: string };
+type Phase = "fragen" | "plz" | "lader" | "kontakt";
 
 export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: string }) {
   const [schritt, setSchritt] = useState(0);
+  const [phase, setPhase] = useState<Phase>("fragen");
   const [antworten, setAntworten] = useState<Record<string, string[]>>({});
+  const [freitexte, setFreitexte] = useState<Record<string, string>>({});
   const [plz, setPlz] = useState("");
   const [umkreis, setUmkreis] = useState("30");
+  const [laderStufe, setLaderStufe] = useState(0);
   const [k, setK] = useState<Kontakt>({ vorname: "", nachname: "", telefon: "", email: "", website: "" });
   const [einwilligung, setEinwilligung] = useState(false);
   const [versucht, setVersucht] = useState(false);
   const [status, setStatus] = useState<"offen" | "sendet" | "fertig" | "fehler">("offen");
   const [gestoppt, setGestoppt] = useState<string | null>(null);
 
-  const gesamt = FRAGEN.length + 2; // + PLZ + Kontakt
-  const fortschritt = Math.round(((status === "fertig" ? gesamt : schritt) / gesamt) * 100);
-  const frage = FRAGEN[schritt];
+  const gesamt = FRAGEN.length + 2;
+  const position = phase === "fragen" ? schritt : phase === "plz" ? FRAGEN.length : FRAGEN.length + 1;
+  const fortschritt = Math.round(((status === "fertig" ? gesamt : position) / gesamt) * 100);
+  const frage = phase === "fragen" ? FRAGEN[schritt] : undefined;
+
+  useEffect(() => {
+    if (phase !== "lader") return;
+    setLaderStufe(0);
+    const t = [700, 1500, 2300].map((ms, i) => window.setTimeout(() => setLaderStufe(i + 1), ms));
+    const ende = window.setTimeout(() => setPhase("kontakt"), 3100);
+    return () => { t.forEach(clearTimeout); clearTimeout(ende); };
+  }, [phase]);
 
   const fehler = useMemo(() => {
     const f: Partial<Record<keyof Kontakt | "einwilligung", string>> = {};
     if (k.vorname.trim().length < 2) f.vorname = "Bitte gib deinen Vornamen an.";
     if (k.nachname.trim().length < 2) f.nachname = "Bitte gib deinen Nachnamen an.";
-    if (k.telefon.replace(/\D/g, "").length < 6) f.telefon = "Bitte gib eine Telefonnummer an, unter der wir dich erreichen.";
+    if (k.telefon.replace(/\D/g, "").length < 6) f.telefon = "Bitte gib eine Nummer an, unter der wir dich erreichen.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(k.email.trim())) f.email = "Bitte gib eine gültige E-Mail-Adresse an.";
     if (!einwilligung) f.einwilligung = "Bitte bestätige die Einwilligung.";
     return f;
   }, [k, einwilligung]);
+
+  function weiter() {
+    if (schritt + 1 < FRAGEN.length) setSchritt((s) => s + 1);
+    else setPhase("plz");
+  }
 
   function waehle(f: Frage, v: string) {
     if (f.multi) {
@@ -164,11 +228,14 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
       return;
     }
     setAntworten((a) => ({ ...a, [f.id]: [v] }));
-    if (f.stopp && f.stopp.v === v) {
-      setGestoppt(f.stopp.text);
-      return;
-    }
-    window.setTimeout(() => setSchritt((s) => s + 1), 180);
+    if (f.stopp && f.stopp.v === v) { setGestoppt(f.stopp.text); return; }
+    window.setTimeout(weiter, 200);
+  }
+
+  function zurueck() {
+    if (phase === "kontakt" || phase === "lader") { setPhase("plz"); return; }
+    if (phase === "plz") { setPhase("fragen"); setSchritt(FRAGEN.length - 1); return; }
+    setSchritt((s) => Math.max(0, s - 1));
   }
 
   async function absenden() {
@@ -177,6 +244,10 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
     setStatus("sendet");
     const a = (id: string) => antworten[id] ?? [];
     const start = a("start")[0];
+    const quiz: Record<string, unknown> = {};
+    for (const f of FRAGEN) quiz[f.id] = f.multi ? a(f.id) : a(f.id)[0] ?? null;
+    if (freitexte.wofuer?.trim()) quiz.wofuer_text = freitexte.wofuer.trim().slice(0, 1000);
+    Object.assign(quiz, { umkreis_km: Number(umkreis), stelle: stelle ?? null, stelle_titel: stelleTitel ?? null });
     const payload = {
       vorname: k.vorname.trim(),
       nachname: k.nachname.trim(),
@@ -191,7 +262,7 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
       verfuegbar_ab: start === "sofort" ? plus(0) : start === "2-4wochen" ? plus(14) : start === "1-3monate" ? plus(30) : "",
       einwilligung,
       stelle: stelle ?? null,
-      quiz: { ...Object.fromEntries(Object.entries(antworten).map(([key, v]) => [key, FRAGEN.find((f) => f.id === key)?.multi ? v : v[0]])), umkreis_km: Number(umkreis), stelle: stelle ?? null, stelle_titel: stelleTitel ?? null },
+      quiz,
       tracking: leseTracking(),
       seite: window.location.pathname + window.location.search,
     };
@@ -200,10 +271,7 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
       if (!r.ok) throw new Error(String(r.status));
       setStatus("fertig");
       window.scrollTo({ top: 0, behavior: "smooth" });
-      try {
-        // Für Werbe-Pixel/Tag-Manager, falls später eingebunden
-        (window as unknown as { dataLayer?: unknown[] }).dataLayer?.push({ event: "bewerbung_abgeschickt" });
-      } catch {}
+      try { (window as unknown as { dataLayer?: unknown[] }).dataLayer?.push({ event: "bewerbung_abgeschickt" }); } catch {}
     } catch {
       setStatus("fehler");
     }
@@ -214,7 +282,7 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
       <div className="quiz">
         <div className="danke">
           <div className="danke__haken">🙌</div>
-          <h2 style={{ margin: 0 }}>Fast geschafft, aber noch nicht ganz</h2>
+          <h2 style={{ margin: 0 }}>Fast, aber noch nicht ganz</h2>
           <p className="quiz__hilfe">{gestoppt}</p>
           <Link href="/wissen" className="btn btn--ghost">Zum Ratgeber</Link>
         </div>
@@ -228,11 +296,10 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
         <div className="quiz__fortschritt"><div style={{ width: "100%" }} /></div>
         <div className="danke">
           <div className="danke__haken">✓</div>
-          <h1 style={{ margin: "8px 0 0" }}>Danke, {k.vorname.trim()}! Deine Bewerbung ist da.</h1>
+          <h1 style={{ margin: "8px 0 0" }}>Stark, {k.vorname.trim()}. Du bist drin.</h1>
           <p className="quiz__hilfe">
-            So geht es weiter: Wir rufen dich für ein kurzes Kennenlern-Telefonat an. Passt es, schalten wir dir danach die Masterclass
-            frei, und sobald du vorbereitet bist, melden sich passende Vertriebe aus deiner Region bei dir. Halte dein Handy in den
-            nächsten Tagen in der Nähe. Bis dahin kannst du dich schon mal einlesen:
+            So geht es weiter: Wir rufen dich in den nächsten Tagen für ein kurzes Kennenlern-Telefonat an. Danach schalten wir dir die
+            Masterclass frei, und dein Profil geht anonym an die passenden Vertriebe. Die melden sich dann bei dir. Halte dein Handy in der Nähe.
           </p>
           <div style={{ display: "grid", gap: 10, width: "100%", maxWidth: 420 }}>
             <Link className="btn btn--ghost" href="/wissen/probetag-im-vertrieb">So läuft ein Probetag ab</Link>
@@ -243,25 +310,21 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
     );
   }
 
-  const zurueck = schritt > 0 && (
-    <button type="button" className="quiz__zurueck" onClick={() => setSchritt((s) => s - 1)}>← Zurück</button>
-  );
-
   return (
     <div className="quiz">
+      <p className="quiz__intro"><strong>Match-Check:</strong> Wir suchen für dich das Beste raus.</p>
       <div className="quiz__top">
-        <span>{zurueck || "2-Minuten-Check"}</span>
-        <span>Schritt {Math.min(schritt + 1, gesamt)} von {gesamt}</span>
+        <span>{position > 0 && phase !== "lader" ? <button type="button" className="quiz__zurueck" onClick={zurueck}>← Zurück</button> : "2 Minuten"}</span>
+        <span>Schritt {Math.min(position + 1, gesamt)} von {gesamt}</span>
       </div>
       <div className="quiz__fortschritt" role="progressbar" aria-valuenow={fortschritt} aria-valuemin={0} aria-valuemax={100} aria-label="Fortschritt">
         <div style={{ width: `${Math.max(4, fortschritt)}%` }} />
       </div>
 
       {frage && (
-        <section aria-live="polite">
+        <section aria-live="polite" key={frage.id}>
           <h1>{frage.titel}</h1>
-          {frage.hilfe && <p className="quiz__hilfe">{frage.hilfe}</p>}
-          {!frage.hilfe && <div style={{ height: 14 }} />}
+          {frage.hilfe ? <p className="quiz__hilfe">{frage.hilfe}</p> : <div style={{ height: 16 }} />}
           <div className={`optionen${frage.zweispaltig ? " optionen--2" : ""}`}>
             {frage.optionen.map((o) => {
               const an = (antworten[frage.id] ?? []).includes(o.v);
@@ -273,26 +336,30 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
               );
             })}
           </div>
+          {frage.freitext && (
+            <div className="feld" style={{ marginTop: 18 }}>
+              <label htmlFor={`ft-${frage.id}`}>{frage.freitext.label}</label>
+              <textarea id={`ft-${frage.id}`} placeholder={frage.freitext.platzhalter} maxLength={1000} value={freitexte[frage.id] ?? ""} onChange={(e) => setFreitexte({ ...freitexte, [frage.id]: e.target.value })} />
+            </div>
+          )}
           {frage.multi && (
-            <button type="button" className="btn btn--red quiz__weiter" disabled={(antworten[frage.id] ?? []).length === 0} style={{ opacity: (antworten[frage.id] ?? []).length === 0 ? 0.45 : 1 }} onClick={() => setSchritt((s) => s + 1)}>
+            <button type="button" className="btn btn--gold quiz__weiter" disabled={(antworten[frage.id] ?? []).length === 0} onClick={weiter}>
               Weiter <Pfeil />
             </button>
           )}
         </section>
       )}
 
-      {schritt === FRAGEN.length && (
+      {phase === "plz" && (
         <section>
-          <h1>Wo wohnst du?</h1>
-          <p className="quiz__hilfe">Damit wir dir Vertriebe in deiner Nähe vorschlagen können.</p>
-          <form onSubmit={(e) => { e.preventDefault(); if (/^\d{5}$/.test(plz)) setSchritt((s) => s + 1); }}>
+          <h1>Wo bist du zu Hause?</h1>
+          <p className="quiz__hilfe">Wir schauen, welche unserer Partner in deiner Region gerade Leute suchen.</p>
+          <form onSubmit={(e) => { e.preventDefault(); if (/^\d{5}$/.test(plz)) setPhase("lader"); }}>
             <div className="feld">
               <label htmlFor="plz">Postleitzahl</label>
               <input id="plz" inputMode="numeric" autoComplete="postal-code" maxLength={5} placeholder="z. B. 10365" value={plz} onChange={(e) => setPlz(e.target.value.replace(/\D/g, "").slice(0, 5))} autoFocus />
             </div>
-            <div className="feld">
-              <label>Wie weit würdest du fahren?</label>
-            </div>
+            <div className="feld"><label>Wie weit würdest du fahren?</label></div>
             <div className="optionen optionen--2" role="radiogroup" aria-label="Umkreis">
               {UMKREIS.map((u) => (
                 <button key={u.v} type="button" role="radio" className="option" aria-checked={umkreis === u.v} onClick={() => setUmkreis(u.v)}>
@@ -300,17 +367,34 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
                 </button>
               ))}
             </div>
-            <button type="submit" className="btn btn--red quiz__weiter" disabled={!/^\d{5}$/.test(plz)} style={{ opacity: /^\d{5}$/.test(plz) ? 1 : 0.45 }}>
-              Weiter <Pfeil />
+            <button type="submit" className="btn btn--gold quiz__weiter" disabled={!/^\d{5}$/.test(plz)}>
+              Passende Vertriebe suchen <Pfeil />
             </button>
           </form>
         </section>
       )}
 
-      {schritt === FRAGEN.length + 1 && (
+      {phase === "lader" && (
+        <section className="lader" aria-live="polite">
+          <div className="lader__ring" aria-hidden="true" />
+          <h2 style={{ margin: 0 }}>Wir suchen für dich …</h2>
+          <ul className="lader__liste">
+            {LADER_SCHRITTE.map((t, i) => (<li key={t} className={laderStufe > i ? "ok" : ""}>{t}</li>))}
+          </ul>
+        </section>
+      )}
+
+      {phase === "kontakt" && (
         <section>
-          <h1>Fast geschafft! Wie erreichen wir dich?</h1>
-          <p className="quiz__hilfe">Kein Lebenslauf, kein Anschreiben. Wir rufen dich an und klären alles Weitere.</p>
+          <div className="treffer" role="status">
+            <span className="treffer__icon">✓</span>
+            <div>
+              <strong>Wir haben passende Vertriebe für dich.</strong>
+              <span>Dein Profil passt zu Partnern rund um {plz}, die gerade Verstärkung suchen und bei denen du sofort starten kannst.</span>
+            </div>
+          </div>
+          <h1 style={{ marginTop: 6 }}>Wohin sollen sie sich melden?</h1>
+          <p className="quiz__hilfe">Trag deine Daten ein, damit wir dein Profil jetzt anonym an die passenden Vertriebe schicken können. Deine Kontaktdaten bekommt nur, wer dich wirklich kennenlernen will.</p>
           <form noValidate onSubmit={(e) => { e.preventDefault(); absenden(); }}>
             <div className="felder-2">
               <Feld id="vorname" label="Vorname" auto="given-name" wert={k.vorname} setze={(v) => setK({ ...k, vorname: v })} fehler={versucht ? fehler.vorname : undefined} />
@@ -325,22 +409,22 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
             <label className="einwilligung">
               <input type="checkbox" checked={einwilligung} onChange={(e) => setEinwilligung(e.target.checked)} />
               <span>
-                Ich bin einverstanden, dass machvertrieb.de (Zoepp Consulting GmbH) meine Angaben speichert, mich telefonisch oder per
-                E-Mail zu passenden Stellen kontaktiert und mein Profil dafür an passende Vertriebsunternehmen weitergibt. Widerruf
-                jederzeit möglich. Details in der <Link href="/datenschutz" target="_blank">Datenschutzerklärung</Link>.
+                Ich bin einverstanden, dass machvertrieb.de (Zoepp Consulting GmbH) meine Angaben speichert, mich telefonisch oder per E-Mail
+                kontaktiert und mein Profil an passende Vertriebsunternehmen weitergibt, zunächst ohne Namen und Kontaktdaten. Widerruf jederzeit
+                möglich. Details in der <Link href="/datenschutz" target="_blank">Datenschutzerklärung</Link>.
               </span>
             </label>
             {versucht && fehler.einwilligung && <div className="feld__fehler">{fehler.einwilligung}</div>}
-            <button type="submit" className="btn btn--red quiz__weiter" disabled={status === "sendet"}>
-              {status === "sendet" ? "Wird gesendet …" : <>Bewerbung abschicken <Pfeil /></>}
+            <button type="submit" className="btn btn--gold quiz__weiter" disabled={status === "sendet"}>
+              {status === "sendet" ? "Wird gesendet …" : <>Profil an passende Vertriebe senden <Pfeil /></>}
             </button>
             {status === "fehler" && <div className="quiz__fehler" role="alert">Das hat leider nicht geklappt. Bitte versuch es gleich noch einmal.</div>}
-            <div className="quiz__vertrauen"><span>🔒 Daten verschlüsselt</span><span>💶 Für dich kostenlos</span><span>⏱ Dauert 2 Minuten</span></div>
+            <div className="quiz__vertrauen"><span>🔒 Anonym vorgestellt</span><span>✦ Nur geprüfte Partner</span><span>💶 Für dich kostenlos</span></div>
           </form>
         </section>
       )}
 
-      {stelleTitel && <div className="stelle-hinweis">Du bewirbst dich auf: {stelleTitel}</div>}
+      {stelleTitel && <div className="stelle-hinweis">Du interessierst dich für: {stelleTitel}</div>}
     </div>
   );
 }
