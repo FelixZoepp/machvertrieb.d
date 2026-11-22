@@ -3,7 +3,7 @@ import { Quiz } from "@/components/quiz";
 import { JOBS } from "@/lib/jobs";
 
 export const metadata: Metadata = {
-  title: "Jetzt bewerben: 2-Minuten-Check für deinen Vertriebsjob",
+  title: "Jetzt Vertrieb finden, der zu dir passt",
   description: "Beantworte ein paar kurze Fragen und bewirb dich ohne Lebenslauf für einen Job im Vertrieb. Für dich kostenlos, auch für Quereinsteiger.",
   alternates: { canonical: "/bewerben" },
 };

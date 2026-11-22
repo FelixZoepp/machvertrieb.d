@@ -5,63 +5,67 @@ import { alleArtikel } from "@/lib/wissen";
 import { STIMMEN } from "@/lib/stimmen";
 import { JobsBoard } from "@/components/jobs-board";
 import { Faq, JsonLd, faqSchema } from "@/components/faq";
-import {
-  IcArrow, IcBell, IcBolt, IcBriefcase, IcBuilding, IcCalendar, IcCap, IcCar, IcCheck, IcClock, IcEyeOff, IcFile, IcHandshake,
-  IcHome, IcLayers, IcLock, IcPhone, IcPin, IcPlay, IcSearch, IcShield, IcSignal, IcSpark, IcStar, IcSun, IcTarget, IcTrend,
-  IcTrophy, IcUser, IcUsers, IcWallet, IcWifi, IcX, Pfeil,
-} from "@/components/icons";
+import { GoldIcon, type GoldIconName } from "@/components/gold-icon";
+import { IcArrow, IcBolt, IcBuilding, IcCap, IcCar, IcCheck, IcClock, IcPhone, IcPlay, IcWallet, IcX, Pfeil } from "@/components/icons";
 import felix from "../../public/img/felix.jpg";
 
-const BRANCHEN = [
-  { n: "Glasfaser", i: <IcWifi /> },
-  { n: "Strom & Gas", i: <IcBolt /> },
-  { n: "Photovoltaik", i: <IcSun /> },
-  { n: "Versicherung", i: <IcShield /> },
-  { n: "Immobilien", i: <IcHome /> },
+const LOGOS = ["bc", "ct", "da", "dds", "despos", "livara", "major", "maxprom", "mr", "orkanor", "salesfocus", "saleswinner", "schweikert", "seifert", "sellwell", "solvon", "sp"];
+
+const PROBLEME: { icon: GoldIconName; t: string; p: string }[] = [
+  { icon: "wachstum", t: "Dein Gehalt hat einen Deckel", p: "Egal, wie viel du gibst: Am Monatsende steht immer dieselbe Zahl auf dem Konto." },
+  { icon: "kalender", t: "Der Schichtplan bestimmt dein Leben", p: "Wochenenden, Spätdienst, Feiertage. Freizeit gibt es, wenn der Plan es erlaubt." },
+  { icon: "trichter", t: "Du weißt nicht, wo du anfangen sollst", p: "Tausende Anzeigen, alle klingen gleich. Ohne Erfahrung fühlt sich jede Bewerbung wie Lotto an." },
+  { icon: "schild", t: "Angst, beim Falschen zu landen", p: "Schlechtes Produkt, Provision kommt nie, keiner bringt dir was bei. Davon hast du schon gehört." },
 ];
 
-const PARTNER_KRITERIEN_L = [
-  { i: <IcLayers />, t: "Produkt mit echtem Nutzen", p: "Nur Produkte, hinter denen du stehen kannst. Keine Abo-Fallen, keine Drückerkolonne." },
-  { i: <IcWallet />, t: "Provisionen, die kommen", p: "Transparentes Modell, pünktliche Abrechnung. Vor dem Start weißt du, wofür du bezahlt wirst." },
-  { i: <IcCap />, t: "Echte Einarbeitung", p: "Mitlaufen, Schulungen, feste Ansprechpartner. Kein Sprung ins kalte Wasser." },
+const TRAUM = [
+  { icon: "wachstum" as GoldIconName, t: <>Der erste Monat, in dem du <span className="serif">mehr verdienst</span> als je zuvor.</>, p: "Im Vertrieb verdienst du an jedem Kunden mit. Wer dranbleibt und gut ausgebildet wird, sieht das irgendwann auf dem Konto." },
+  { icon: "ziel" as GoldIconName, t: <>Ziele, die plötzlich <span className="serif">realistisch</span> werden.</>, p: "Das eigene Auto. Die eigene Wohnung. Urlaub, ohne vorher dreimal zu rechnen. Für viele ist genau das der Grund, warum sie anfangen." },
+  { icon: "handschlag" as GoldIconName, t: <>Ein Team, das dich <span className="serif">mitzieht.</span></>, p: "Leute, die gewinnen wollen und dich pushen. Statt Kollegen, die dir sagen, dass sowieso nichts geht." },
 ];
-const PARTNER_KRITERIEN_R = [
-  { i: <IcUsers />, t: "Team, das bleibt", p: "Wir schauen, wie lange Leute bei einem Partner bleiben. Hohe Fluktuation ist ein Ausschlussgrund." },
-  { i: <IcTrend />, t: "Aufstieg nach Leistung", p: "Klare Wege zum Teamleiter, nicht nach Betriebszugehörigkeit." },
-  { i: <IcHandshake />, t: "Fairer Umgang", p: "Hält ein Partner Zusagen nicht ein, arbeiten wir nicht mehr mit ihm. Du sagst uns Bescheid, wir kümmern uns." },
+
+const ARTEN: { icon: GoldIconName; t: string; p: string; geld: string }[] = [
+  { icon: "bewerber", t: "An der Haustür beraten", p: "Du bist in deinem Gebiet unterwegs, sprichst mit Haushalten über Glasfaser, Strom oder Solar und schließt direkt ab.", geld: "Viele Provisionen, jede Woche Geld" },
+  { icon: "handschlag", t: "Termine wahrnehmen und abschließen", p: "Du bekommst feste Termine mit Interessenten und konzentrierst dich nur aufs Beraten und Abschließen.", geld: "Weniger Kunden, dafür große Provisionen" },
+  { icon: "radar", t: "Interessenten finden, ohne zu verkaufen", p: "Du findest Leute mit Interesse und machst Termine für die Berater. Ideal zum Reinkommen.", geld: "Fester Betrag pro Termin" },
+  { icon: "telefon", t: "Am Telefon", p: "Du sprichst Interessenten am Telefon an, qualifizierst oder schließt direkt ab. Oft von zu Hause möglich.", geld: "Provision pro Abschluss oder Termin" },
+  { icon: "schild", t: "Kunden beraten: Versicherung & Finanzen", p: "Du hilfst Menschen bei Absicherung und Vorsorge. Manche Partner geben dir Bestandskunden zum Start.", geld: "Oft Fixum plus Provision" },
+  { icon: "wachstum", t: "Später: Dein eigenes Team", p: "Wer gut ist und andere mitzieht, baut ein Team auf und verdient an den Ergebnissen seiner Leute mit.", geld: "Du verdienst am Team mit" },
+];
+
+const WEGE: { icon: GoldIconName; z: string; t: string; p: string }[] = [
+  { icon: "chat", z: "2 Minuten online", t: "Fragen beantworten", p: "Wie willst du arbeiten, was willst du verdienen, wo wohnst du? Kein Lebenslauf, kein Anschreiben." },
+  { icon: "telefon", z: "Kennenlernen", t: "Wir rufen dich an", p: "Wir lernen dich kennen und schauen gemeinsam, welche Vertriebe wirklich zu dir passen." },
+  { icon: "cloud", z: "Online, ca. 1 Stunde", t: "Kostenlose Vorbereitung", p: "In unserer Masterclass lernst du das richtige Mindset und wie du im Gespräch überzeugst." },
+  { icon: "handschlag", z: "Du entscheidest", t: "Probetag und Start", p: "Passende Vertriebe melden sich bei dir. Du suchst dir aus, wo du zum Probetag gehst, und startest." },
+];
+
+const KRITERIEN = [
+  { t: "Ein Produkt, hinter dem du stehen kannst", p: "Keine Abo-Fallen, keine Drückerkolonnen, kein Produkt, für das du dich schämen musst." },
+  { t: "Provisionen, die wirklich kommen", p: "Klares Modell, pünktliche Abrechnung. Vor dem Start weißt du, wofür du wie viel bekommst." },
+  { t: "Echte Einarbeitung", p: "Mitlaufen, Schulungen, feste Ansprechpartner. Kein Sprung ins kalte Wasser." },
+  { t: "Leute, die bleiben", p: "Wir schauen, wie lange Leute bei einem Partner bleiben. Hohe Fluktuation fliegt raus." },
 ];
 
 const STORY = [
   { i: <IcBolt />, j: "2018", t: "„Aus mir wird nichts.“", p: "Schlechte Noten, jeden Tag gezockt, kein Plan. Ich habe mir selbst gesagt, dass aus mir nichts wird." },
   { i: <IcCap />, j: "2021", t: "Studium. Gezwungenermaßen.", p: "Nebenbei Social-Media-Beiträge, Videokurse für 50 €. Eineinhalb Jahre rumgedümpelt, ohne wirklich Geld zu verdienen." },
-  { i: <IcPhone />, j: "Der Wendepunkt", t: "Nur noch eins: verkaufen lernen.", p: "Agenturdienstleistungen, alles Mögliche. Im dritten Monat zum ersten Mal 10.000 € in einem Monat. Danach den ersten Vertrieb aus dem Kinderzimmer aufgebaut." },
-  { i: <IcClock />, j: "2022 bis 2024", t: "14 Stunden am Tag. Fast pleite.", p: "Erstes Büro, ein kleiner Raum. Treue Leute gewonnen, viele verloren. Vom 500-€-Passat zum ersten Arteon, sechs Vollzeitkräfte und trotzdem fast pleite." },
+  { i: <IcPhone />, j: "Der Wendepunkt", t: "Nur noch eins: verkaufen lernen.", p: "Im dritten Monat zum ersten Mal 10.000 € in einem Monat. Danach den ersten Vertrieb aus dem Kinderzimmer aufgebaut." },
+  { i: <IcClock />, j: "2022 bis 2024", t: "14 Stunden am Tag. Fast pleite.", p: "Erstes Büro, ein kleiner Raum. Vom 500-€-Passat, der auseinandergefallen ist, zum ersten Arteon. Sechs Vollzeitkräfte und trotzdem fast pleite." },
   { i: <IcBuilding />, j: "Ende 2024", t: "Nicht aufgegeben.", p: "Neues Büro mit 130 Quadratmetern. 2025 ein gutes Jahr, 2026 ein noch besseres." },
-  { i: <IcCar />, j: "Heute", t: "Porsche mit 23.", p: "Über 100 Kunden, sechsstellige Monatsumsätze, Beteiligungen an Sales-Unternehmen, über 300.000 € in Coachings investiert. Diese Chance gebe ich mit machvertrieb.de weiter." },
-];
-
-const TYPEN = [
-  { i: <IcTarget />, t: "Closer", p: "Du bekommst qualifizierte Termine und schließt ab. Länger beim Kunden, dafür große Tickets.", ticket: 5, termine: 2 },
-  { i: <IcHome />, t: "Berater im Außendienst", p: "Du sprichst Haushalte in deinem Gebiet an und schließt direkt ab. Konstante Provision.", ticket: 2, termine: 5 },
-  { i: <IcSignal />, t: "Lead-Generierung", p: "Du findest Interessenten und legst Termine, ohne selbst zu verkaufen. Klarer Einstieg.", ticket: 1, termine: 5 },
-  { i: <IcPhone />, t: "Telefonvertrieb", p: "Qualifizieren oder abschließen am Telefon, oft remote möglich.", ticket: 3, termine: 4 },
-  { i: <IcShield />, t: "Finanzen & Versicherung", p: "Beratung zu Absicherung und Vorsorge, teils mit Bestandskunden zum Start.", ticket: 4, termine: 3 },
-  { i: <IcTrophy />, t: "Teamleitung", p: "Du baust ein Team auf und verdienst an den Ergebnissen deines Teams mit.", ticket: 5, termine: 3 },
+  { i: <IcCar />, j: "Heute", t: "Porsche mit 23.", p: "Über 100 Kunden, sechsstellige Monatsumsätze, über 300.000 € in Coachings investiert. Diese Chance gebe ich mit machvertrieb.de weiter." },
 ];
 
 const FAQ = [
-  { q: "Woher weiß ich, dass der Vertrieb seriös ist?", a: "Weil jeder Partner unseren Partner-Check durchläuft: Produkt, Provisionsmodell, Auszahlung, Einarbeitung und wie lange Leute dort bleiben. Felix und sein Team von Zoepp Consulting arbeiten täglich mit Direktvertrieben und wissen, wer seine Leute fair behandelt." },
-  { q: "Werden die Provisionen wirklich ausgezahlt?", a: "Unsere Partner verpflichten sich zu transparenter, pünktlicher Abrechnung. Du weißt vor dem Start, wofür du bezahlt wirst. Hält sich ein Partner nicht daran, arbeiten wir nicht mehr mit ihm." },
-  { q: "Warum nicht einfach selbst irgendwo bewerben?", a: "Weil du dann oft nicht weißt, woran du bist: Ist das Produkt gut? Wird ausgebildet? Kommt die Provision? Viele verspielen ihre Chance im falschen Vertrieb. Über uns bekommst du geprüfte Partner, Vorbereitung und mehrere Angebote zur Auswahl." },
-  { q: "Brauche ich Erfahrung?", a: "Nein. Viele Partner suchen ausdrücklich Quereinsteiger. Wichtiger sind Ehrgeiz, Zuverlässigkeit und der Wille zu lernen. Den Rest bekommst du in der Masterclass und der Einarbeitung." },
+  { q: "Brauche ich Erfahrung im Vertrieb?", a: "Nein. Viele unserer Partner suchen ausdrücklich Quereinsteiger, zum Beispiel aus Gastro, Handwerk, Einzelhandel oder Pflege. Wichtiger sind Ehrgeiz und Zuverlässigkeit. Den Rest lernst du in der Vorbereitung und der Einarbeitung." },
+  { q: "Woher weiß ich, dass der Vertrieb seriös ist?", a: "Jeder Partner muss durch unseren Check: Produkt, Provisionsmodell, Auszahlung, Einarbeitung und wie lange Leute dort bleiben. Felix und sein Team arbeiten täglich mit Vertrieben und wissen, wer seine Leute fair behandelt." },
+  { q: "Werden die Provisionen wirklich ausgezahlt?", a: "Unsere Partner verpflichten sich zu klarer, pünktlicher Abrechnung. Du weißt vor dem Start, wofür du wie viel bekommst. Hält sich ein Partner nicht daran, arbeiten wir nicht mehr mit ihm." },
+  { q: "Was verdient man im Vertrieb?", a: "Das hängt von der Art des Vertriebs, deinem Einsatz und deinem Partner ab. Manche zahlen viele kleinere Provisionen, andere wenige große, manche ein Fixum plus Provision. Im Telefonat sagen wir dir ehrlich, was in deinem Fall realistisch ist." },
   { q: "Geht das auch nebenberuflich?", a: "Nein. Unsere Partner suchen Leute, die es ernst meinen: Vollzeit oder Teilzeit." },
-  { q: "Wird mein Profil anonym weitergegeben?", a: "Ja. Wir stellen dein Profil zuerst ohne Namen und Kontaktdaten vor. Erst wenn ein Partner dich kennenlernen möchte, bringen wir euch zusammen." },
-  { q: "Warum fragt ihr nach Wunschgehalt und Abschluss?", a: "Damit wir dich dorthin vermitteln, wo dein Ziel realistisch ist und die Voraussetzungen passen. Je besser wir dich kennen, desto genauer passt der Vertrieb." },
-  { q: "Kostet mich das etwas?", a: "Nein. Match-Check, Telefonat, Masterclass und Vermittlung sind für dich komplett kostenlos." },
+  { q: "Warum soll ich mich nicht einfach selbst bewerben?", a: "Weil du dann oft nicht weißt, woran du bist. Viele verspielen ihre Chance im falschen Vertrieb. Über uns bekommst du geprüfte Partner, eine Vorbereitung und mehrere Angebote zur Auswahl." },
+  { q: "Bekommt mein Chef oder jemand anderes meine Daten?", a: "Nein. Dein Profil geht zuerst ohne Namen und Kontaktdaten an passende Partner. Erst wenn einer dich kennenlernen möchte und du einverstanden bist, bringen wir euch zusammen." },
+  { q: "Kostet mich das etwas?", a: "Nein. Fragebogen, Telefonat, Vorbereitung und Vermittlung sind für dich komplett kostenlos." },
 ];
-
-const Haken = () => <span className="haken"><IcCheck /></span>;
-const Skala = ({ n }: { n: number }) => <span className="skala__p">{[1, 2, 3, 4, 5].map((k) => <i key={k} className={k <= n ? "an" : ""} />)}</span>;
 
 export default function Home() {
   const artikel = alleArtikel().slice(0, 3);
@@ -70,282 +74,184 @@ export default function Home() {
       <JsonLd data={faqSchema(FAQ)} />
 
       {/* ================= HERO ================= */}
-      <section className="hero">
-        <div className="hero__bg" aria-hidden="true" />
-        <div className="wrap hero__grid">
-          <div className="hero__copy">
-            <span className="tag tag--voll">Vertrieb mit Anspruch</span>
-            <h1 className="h1">Finde den Vertrieb, der <span className="b">dich groß macht.</span></h1>
-            <p className="lead">Wir vermitteln dich an geprüfte Vertriebe in deiner Region: faire Provisionen, echte Ausbildung, ein Produkt mit Nutzen. Vorqualifiziert und vorbereitet musst du nur noch zum Probetag.</p>
-            <ul className="vorteile-box">
-              <li><Haken />Nur geprüfte Partner</li>
-              <li><Haken />Mehrere Angebote, du wählst</li>
-              <li><Haken />Kostenlose Masterclass</li>
-              <li><Haken />Vollzeit oder Teilzeit</li>
+      <section className="hero2">
+        <div className="hero2__block">
+          <div className="hero2__bild"><Image src={felix} alt="Felix Zoepp, Gründer von machvertrieb.de" priority placeholder="blur" sizes="60vw" /></div>
+          <div className="hero2__inhalt">
+            <span className="hero2__pille">Für Quereinsteiger &amp; Vertriebler in ganz Deutschland</span>
+            <h1>Verdien endlich, <span className="serif">was du wert bist.</span></h1>
+            <p className="hero2__text">Ohne Studium, ohne Erfahrung. Wir finden den Vertrieb, der zu dir passt, bereiten dich kostenlos vor und bringen dich zum Probetag. Du musst nur noch anfangen.</p>
+            <ul className="hero2__checks">
+              <li><IcCheck />Nur seriöse Vertriebe mit fairen Provisionen</li>
+              <li><IcCheck />Kostenlose Vorbereitung, bevor du startest</li>
+              <li><IcCheck />Mehrere Angebote, du entscheidest</li>
+              <li><IcCheck />Vollzeit oder Teilzeit, in deiner Region</li>
             </ul>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Link href="/bewerben" className="btn btn--brand">Kostenlosen Match-Check starten <Pfeil /></Link>
-            </div>
-            <div className="felix-chip">
-              <Image src={felix} alt="Felix Zoepp" width={80} height={80} />
-              <span>Initiiert von <strong>Felix Zoepp</strong> · 103 Vertriebe arbeiten mit seinem System</span>
-            </div>
+            <div><Link href="/bewerben" className="btn btn--brand">Jetzt Vertrieb finden, der zu mir passt <Pfeil /></Link></div>
           </div>
-
-          <div className="buehne" aria-hidden="true">
-            <div className="buehne__felix">
-              <Image src={felix} alt="" sizes="300px" priority />
-            </div>
-            <div className="handy">
-              <div className="handy__screen">
-                <div className="handy__notch" />
-                <div className="app-kopf"><b>Match-Check</b><span>fertig</span></div>
-                <div className="app-titel">3 Vertriebe <span>passen zu dir</span></div>
-                {[
-                  { i: <IcWifi />, n: "Glasfaser-Vertrieb", o: "Region 10365 · 12 km", p: "96 %", t: ["Provision pro Kunde", "Einarbeitung"] },
-                  { i: <IcSun />, n: "Photovoltaik", o: "Region 10365 · 24 km", p: "91 %", t: ["Große Tickets", "Termine gestellt"] },
-                  { i: <IcBolt />, n: "Energie-Vertrieb", o: "Region 10365 · 8 km", p: "88 %", t: ["Fixum + Provision"] },
-                ].map((m) => (
-                  <div key={m.n} className="match">
-                    <div className="match__top">
-                      <span className="match__logo">{m.i}</span>
-                      <div><div className="match__name">{m.n}</div><div className="match__ort">{m.o}</div></div>
-                      <span className="match__prozent">{m.p}</span>
-                    </div>
-                    <div className="match__tags">{m.t.map((t) => <span key={t} className="mini-tag">{t}</span>)}<span className="mini-tag mini-tag--ok">geprüft</span></div>
-                  </div>
+          <Link href="#felix" className="hero2__felix"><i><IcPlay /></i><div><b>Felix Zoepp</b><span>Vom Zocker zum Porsche mit 23</span></div></Link>
+          <div className="hero2__logos">
+            <span>Vertriebe, die mit Felix&apos; System arbeiten:</span>
+            <div className="hero2__lauf">
+              <div className="hero2__spur">
+                {[...LOGOS, ...LOGOS].map((l, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img key={i} src={`/logos/${l}-weiss.png`} alt={i < LOGOS.length ? l : ""} loading="lazy" />
                 ))}
-                <div className="app-btn">Profil anonym senden</div>
               </div>
             </div>
-            <div className="schwebe schwebe--2"><span className="schwebe__icon"><IcPlay /></span><div><b>Masterclass</b><span>8 von 8 Modulen</span></div></div>
-            <div className="schwebe schwebe--1"><span className="schwebe__icon schwebe__icon--ok"><IcPhone /></span><div><b>Partner ruft an</b><span>Glasfaser-Vertrieb</span></div></div>
-            <div className="schwebe schwebe--3"><span className="schwebe__icon"><IcCalendar /></span><div><b>Probetag</b><span>Do · 10:00 Uhr</span></div></div>
           </div>
         </div>
       </section>
-
-      {/* ================= BRANCHEN ================= */}
-      <div className="wrap leiste">
-        <p>Unsere Partner kommen aus diesen Branchen</p>
-        <div className="leiste__reihe">{BRANCHEN.map((b) => <div key={b.n} className="leiste__item">{b.i}{b.n}</div>)}</div>
-      </div>
 
       {/* ================= PROBLEM ================= */}
       <section className="section">
         <div className="wrap">
           <div className="head center" data-reveal>
-            <span className="tag">Das Problem</span>
-            <h2 className="h2">Kennst du das aus <span className="b">deinem Job?</span></h2>
-            <p className="lead">Du arbeitest viel und kannst gut mit Menschen. Trotzdem geht es nicht voran. Und wer in den Vertrieb will, landet oft beim Falschen.</p>
+            <span className="tag">Kennst du das?</span>
+            <h2 className="h2">Du gibst alles. <span className="b">Und es reicht trotzdem nicht.</span></h2>
+            <p className="lead">Du kannst gut mit Menschen, bist fleißig und willst mehr. Aber in deinem Job geht es nicht voran.</p>
           </div>
-          <div className="grid grid--3">
-            <div className="card" data-reveal>
-              <div className="mock">
-                <div className="mock__label">Gehaltsabrechnung</div>
-                <div className="mock__zeile"><span>Grundgehalt</span><small>fix</small></div>
-                <div className="mock__zeile"><span>Leistungsbonus</span><small>0,00 €</small></div>
-                <div className="mock__zeile"><span>Gehaltsband</span><span className="rot" style={{ fontWeight: 800 }}>max. erreicht</span></div>
+          <div className="features">
+            {PROBLEME.map((x, k) => (
+              <div key={x.t} className="feature" data-reveal style={{ ["--d" as string]: `${k * 90}ms` }}>
+                <GoldIcon name={x.icon} size={96} />
+                <h3>{x.t}</h3>
+                <p>{x.p}</p>
               </div>
-              <span className="card__linie"><IcWallet /></span>
-              <h3>Dein Gehalt hat einen Deckel. Egal, wie gut du bist.</h3>
-              <p>Du gibst alles, am Monatsende steht dieselbe Zahl auf dem Konto.</p>
-            </div>
-            <div className="card" data-reveal style={{ ["--d" as string]: "100ms" }}>
-              <div className="mock">
-                <div className="mock__label">Schichtplan · KW 48</div>
-                <div className="schicht">{["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"].map((d, k) => <div key={d} className={k >= 5 || k === 2 ? "x" : ""}>{d}</div>)}</div>
-                <div className="mock__zeile" style={{ marginTop: 8 }}><span>Wochenende frei</span><span className="rot" style={{ fontWeight: 800 }}>nein</span></div>
-              </div>
-              <span className="card__linie"><IcCalendar /></span>
-              <h3>Der Schichtplan bestimmt dein Leben.</h3>
-              <p>Wochenenden, Spätdienst, Feiertage. Freizeit gibt es, wenn der Plan es erlaubt.</p>
-            </div>
-            <div className="card" data-reveal style={{ ["--d" as string]: "200ms" }}>
-              <div className="mock mock__fade">
-                <div className="mock__label">Jobbörse · „Vertrieb“</div>
-                <div className="mock__zeile"><span>2.413 Anzeigen</span><small>alle gleich</small></div>
-                <div className="mock__zeile"><span>Top-Verdienst garantiert!!</span><small>?</small></div>
-                <div className="mock__zeile"><span>Karriere ohne Grenzen</span><small>?</small></div>
-                <div className="mock__zeile"><span>Sofort-Start, keine Fragen</span><small>?</small></div>
-              </div>
-              <span className="card__linie"><IcSearch /></span>
-              <h3>Jede Anzeige klingt gleich gut.</h3>
-              <p>Ob Produkt, Provision und Einarbeitung stimmen, siehst du erst, wenn es zu spät ist.</p>
-            </div>
-            <div className="card" data-reveal>
-              <span className="card__linie"><IcX /></span>
-              <h3>Provision versprochen, nie gesehen.</h3>
-              <p>Unklare Modelle, Stornoabzüge, Ausreden. Viele hören nach ein paar Monaten frustriert auf.</p>
-            </div>
-            <div className="card" data-reveal style={{ ["--d" as string]: "100ms" }}>
-              <span className="card__linie"><IcUser /></span>
-              <h3>Ins kalte Wasser geworfen.</h3>
-              <p>Keine Einarbeitung, kein Mindset, keine Ansprechpartner. Wer so startet, verliert schnell die Lust.</p>
-            </div>
-            <div className="card" data-reveal style={{ ["--d" as string]: "200ms" }}>
-              <span className="card__linie"><IcFile /></span>
-              <h3>Der Lebenslauf entscheidet, nicht du.</h3>
-              <p>Ohne passenden Abschluss wirst du gar nicht erst eingeladen, egal was du draufhast.</p>
-            </div>
+            ))}
           </div>
-          <div className="cta-zeile"><Link href="/bewerben" className="btn btn--brand">Den richtigen Vertrieb finden <Pfeil /></Link></div>
         </div>
       </section>
 
-      {/* ================= METHODE ================= */}
-      <section id="methode" className="section" style={{ paddingTop: 0 }}>
+      {/* ================= TRAUM ================= */}
+      <section className="section section--soft" style={{ overflow: "hidden" }}>
+        <div className="motiv motiv--loewe" aria-hidden="true" />
         <div className="wrap">
-          <div className="head center" data-reveal>
-            <span className="tag">So funktioniert&apos;s</span>
-            <h2 className="h2">Die <span className="b">machvertrieb</span>-Methode</h2>
-            <p className="lead">Statt dich auf gut Glück zu bewerben, durchläufst du einen klaren Prozess: Wir finden, wo du hinpasst, bereiten dich vor und bringen die Vertriebe zu dir.</p>
+          <div className="head" data-reveal>
+            <span className="tag">Stell dir vor</span>
+            <h2 className="h2">Was wäre, wenn sich deine Arbeit <span className="b">endlich lohnt?</span></h2>
+            <p className="lead">Im Vertrieb gibt es keine Gehaltstabelle, die dich bremst. Was du verdienst, hängt an dir. Genau deshalb haben so viele, die heute ganz vorne sind, mal ganz ohne Erfahrung angefangen.</p>
           </div>
-          <div className="methode">
-            <article className="panel">
-              <div className="panel__bild">
-                <div className="chipwolke">
-                  <span className="chip"><IcTarget />Arbeitsstil</span>
-                  <span className="chip"><IcWallet />Wunschgehalt</span>
-                  <span className="chip"><IcPin />Region & PLZ</span>
-                  <span className="chip"><IcCap />Abschluss</span>
-                  <div className="trichter"><div className="trichter__form" /></div>
-                  <div style={{ gridColumn: "span 2", justifySelf: "center" }} className="profil"><span className="icon"><IcUser /></span><div><b>Dein Profil</b><small>Closer · Große Tickets · Vollzeit</small></div></div>
-                </div>
+          <div className="traum">
+            {TRAUM.map((x, k) => (
+              <div key={k} className="traum__karte" data-reveal style={{ ["--d" as string]: `${k * 100}ms` }}>
+                <GoldIcon name={x.icon} size={72} />
+                <h3>{x.t}</h3>
+                <p>{x.p}</p>
               </div>
-              <div className="panel__text">
-                <div className="panel__nr"><b>01</b><i /></div>
-                <h3>Der Match-Check</h3>
-                <div className="panel__unter">2 Minuten. Kein Lebenslauf.</div>
-                <p>Kleine oder große Tickets? Closen oder Leads? Wie viel willst du verdienen, und wofür? <strong>Aus deinen Antworten entsteht dein Profil</strong>, mit dem wir die passenden Partner finden.</p>
-              </div>
-            </article>
-            <article className="panel">
-              <div className="panel__bild">
-                <div className="ui">
-                  <div className="ui__titel">Masterclass <span className="chip chip--brand">8 / 8</span></div>
-                  <div className="fortschritt"><i style={{ width: "100%" }} /></div>
-                  {["Mindset im Vertrieb", "Die 5 Kernqualitäten", "So überzeugst du im Gespräch", "Realistische Verdienstmöglichkeiten"].map((m) => (
-                    <div key={m} className="ui__zeile"><span className="icon icon--brand"><IcPlay /></span><span>{m}</span><small className="ok"><IcCheck width={16} height={16} /></small></div>
-                  ))}
-                </div>
-              </div>
-              <div className="panel__text">
-                <div className="panel__nr"><b>02</b><i /></div>
-                <h3>Telefonat & Masterclass</h3>
-                <div className="panel__unter">Vorqualifiziert. Vorbereitet.</div>
-                <p>Wir lernen dich am Telefon kennen und schalten dir die Masterclass frei: 8 Module, etwa eine Stunde. <strong>Mindset, Kernqualitäten, Gesprächsführung.</strong> So startest du nicht bei null.</p>
-              </div>
-            </article>
-            <article className="panel">
-              <div className="panel__bild">
-                <div className="anrufe">
-                  <div className="ui" style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                    <span className="icon"><IcEyeOff /></span>
-                    <div><b style={{ fontSize: 14 }}>Profil #4821 · anonym</b><div style={{ color: "var(--muted)", fontSize: 12 }}>an 3 passende Partner gesendet</div></div>
-                  </div>
-                  {[["Glasfaser-Vertrieb", "möchte dich kennenlernen"], ["Photovoltaik-Partner", "möchte dich kennenlernen"]].map(([n, s]) => (
-                    <div key={n} className="anruf"><span className="anruf__ring"><IcPhone /></span><div><b>{n}</b><small>{s}</small></div><em>Anfrage</em></div>
-                  ))}
-                </div>
-              </div>
-              <div className="panel__text">
-                <div className="panel__nr"><b>03</b><i /></div>
-                <h3>Vertriebe melden sich</h3>
-                <div className="panel__unter">Anonym. Mehrere Angebote.</div>
-                <p>Dein Profil geht <strong>ohne Namen</strong> an die passenden Partner in deiner Region. Wer dich kennenlernen will, meldet sich. <strong>Du entscheidest</strong>, wo du hingehst.</p>
-              </div>
-            </article>
-            <article className="panel">
-              <div className="panel__bild">
-                <div className="ui">
-                  <div className="ui__titel">Dein Probetag <span className="chip chip--brand"><IcCalendar />Do · 10:00</span></div>
-                  {([["Team kennenlernen", <IcUsers key="u" />], ["Mitlaufen im Alltag", <IcBriefcase key="b" />], ["Provisionsmodell schwarz auf weiß", <IcFile key="f" />], ["Start mit Einarbeitung", <IcBolt key="z" />]] as const).map(([t, i]) => (
-                    <div key={t} className="ui__zeile"><span className="icon">{i}</span><span>{t}</span><small className="ok"><IcCheck width={16} height={16} /></small></div>
-                  ))}
-                </div>
-              </div>
-              <div className="panel__text">
-                <div className="panel__nr"><b>04</b><i /></div>
-                <h3>Probetag & Start</h3>
-                <div className="panel__unter">Kein Vorstellungsgespräch mehr.</div>
-                <p>Du bist vorqualifiziert und vorbereitet, also geht es <strong>direkt in den Alltag</strong>. Passt es für beide Seiten, startest du sofort mit Einarbeitung. Wir bleiben dein Ansprechpartner.</p>
-              </div>
-            </article>
+            ))}
           </div>
-          <div className="cta-zeile"><Link href="/bewerben" className="btn btn--brand">Match-Check starten <Pfeil /></Link></div>
+          <p className="hinweis-klein">Was du verdienst, hängt von dir, deinem Einsatz und deinem Vertrieb ab. Wir versprechen dir kein Einkommen, aber den richtigen Start.</p>
+          <div className="cta-zeile"><Link href="/bewerben" className="btn btn--brand">Jetzt Vertrieb finden, der zu mir passt <Pfeil /></Link></div>
         </div>
       </section>
 
-      {/* ================= PARTNER-CHECK ================= */}
-      <section id="partner" className="section section--soft">
+      {/* ================= VERTRIEBSARTEN ================= */}
+      <section id="arten" className="section">
         <div className="wrap">
           <div className="head center" data-reveal>
-            <span className="tag">Wofür wir stehen</span>
-            <h2 className="h2">Der <span className="b">Partner-Check</span></h2>
-            <p className="lead">Im Vertrieb gibt es großartige Unternehmen und welche, die Leute benutzen. Jeder Partner muss durch unseren Check, bevor wir auch nur einen Bewerber vermitteln.</p>
+            <span className="tag">Welcher Vertrieb passt zu dir?</span>
+            <h2 className="h2">Viele Provisionen oder <span className="b">wenige große?</span></h2>
+            <p className="lead">Vertrieb ist nicht gleich Vertrieb. Manche wollen jede Woche Geld sehen, andere lieber weniger Kunden und dafür richtig große Provisionen. Wir finden raus, was zu dir passt.</p>
           </div>
-          <div className="radar-wrap">
-            <div className="radar-spalte">
-              {PARTNER_KRITERIEN_L.map((k) => <div key={k.t} className="radar-karte" data-reveal><span className="icon icon--brand">{k.i}</span><div><b>{k.t}</b><span>{k.p}</span></div></div>)}
-            </div>
-            <div className="radar" aria-hidden="true">
-              <div className="radar__innen">
-                <div className="radar__kreuz" />
-                {[8, 20, 32].map((p) => <div key={p} className="radar__ring" style={{ inset: `${p}%` }} />)}
-                <div className="radar__strahl" />
-                <span className="radar__blip" style={{ left: "22%", top: "30%" }} />
-                <span className="radar__blip" style={{ left: "72%", top: "64%" }} />
-                <span className="radar__blip" style={{ left: "64%", top: "18%" }} />
-                <div className="radar__mitte"><div><IcShield /><b>Geprüfter Partner</b><small>machvertrieb.de</small></div></div>
+          <div className="arten">
+            {ARTEN.map((a, k) => (
+              <div key={a.t} className="art" data-reveal style={{ ["--d" as string]: `${(k % 3) * 90}ms` }}>
+                <GoldIcon name={a.icon} size={72} />
+                <h3>{a.t}</h3>
+                <p>{a.p}</p>
+                <div className="art__geld"><IcWallet />{a.geld}</div>
               </div>
+            ))}
+          </div>
+          <div className="cta-zeile"><Link href="/bewerben" className="btn btn--brand">Finde raus, welcher Vertrieb zu dir passt <Pfeil /></Link></div>
+        </div>
+      </section>
+
+      {/* ================= ABLAUF ================= */}
+      <section id="ablauf" className="section section--soft" style={{ overflow: "hidden" }}>
+        <div className="motiv motiv--wellen" aria-hidden="true" />
+        <div className="wrap">
+          <div className="head center" data-reveal>
+            <span className="tag">So läuft&apos;s</span>
+            <h2 className="h2">Einmal bewerben. <span className="b">Vorbereitet starten.</span></h2>
+            <p className="lead">Kein Bewerbungsmarathon, keine Vorstellungsgespräche, bei denen du dich verkaufen musst. Wir machen das mit dir zusammen.</p>
+          </div>
+          <div className="wege">
+            {WEGE.map((w, k) => (
+              <div key={w.t} className="weg" data-reveal style={{ ["--d" as string]: `${k * 90}ms` }}>
+                <span className="weg__nr">0{k + 1}</span>
+                <GoldIcon name={w.icon} size={72} />
+                <span className="weg__zeit">{w.z}</span>
+                <h3>{w.t}</h3>
+                <p>{w.p}</p>
+              </div>
+            ))}
+          </div>
+          <div className="cta-zeile"><Link href="/bewerben" className="btn btn--brand">Jetzt in 2 Minuten starten <Pfeil /></Link></div>
+        </div>
+      </section>
+
+      {/* ================= SICHERHEIT / RADAR ================= */}
+      <section id="sicherheit" className="section" style={{ overflow: "hidden" }}>
+        <div className="motiv motiv--loewe" aria-hidden="true" style={{ opacity: 0.6 }} />
+        <div className="wrap radar-block">
+          <div className="radar" aria-hidden="true" data-reveal>
+            <div className="radar__innen">
+              <div className="radar__kreuz" />
+              {[8, 20, 32].map((p) => <div key={p} className="radar__ring" style={{ inset: `${p}%` }} />)}
+              <div className="radar__strahl" />
+              <div className="radar__label" style={{ left: "60%", top: "22%" }}><i /><span>Glasfaser · geprüft</span></div>
+              <div className="radar__label" style={{ left: "18%", top: "38%" }}><i /><span>Solar · geprüft</span></div>
+              <div className="radar__label" style={{ left: "64%", top: "66%" }}><i /><span>Energie · geprüft</span></div>
+              <div className="radar__label" style={{ left: "26%", top: "72%" }}><i /><span>Versicherung · geprüft</span></div>
+              <div className="radar__mitte"><div><b>machvertrieb</b><small>Partner-Check</small></div></div>
             </div>
-            <div className="radar-spalte">
-              {PARTNER_KRITERIEN_R.map((k) => <div key={k.t} className="radar-karte" data-reveal><span className="icon icon--brand">{k.i}</span><div><b>{k.t}</b><span>{k.p}</span></div></div>)}
-            </div>
+          </div>
+          <div className="head" data-reveal>
+            <span className="tag">Deine Sicherheit</span>
+            <h2 className="h2">Wir lassen dich nicht <span className="b">beim Falschen landen.</span></h2>
+            <p className="lead">Im Vertrieb gibt es großartige Unternehmen und welche, die Leute benutzen. Bevor wir dich irgendwohin vermitteln, muss jeder Partner durch unseren Check.</p>
+            <ul className="kriterien">
+              {KRITERIEN.map((k) => (<li key={k.t}><span className="haken"><IcCheck /></span><div><b>{k.t}</b><span>{k.p}</span></div></li>))}
+            </ul>
           </div>
         </div>
       </section>
 
       {/* ================= VERGLEICH ================= */}
-      <section className="section">
+      <section className="section section--soft">
         <div className="wrap">
           <div className="head center" data-reveal>
-            <span className="tag">Vergleich</span>
-            <h2 className="h2">Selbst bewerben oder <span className="b">mit uns starten</span></h2>
-            <p className="lead">Der Unterschied liegt nicht in der Zahl der Anzeigen, sondern darin, wie viel Risiko bei dir bleibt.</p>
+            <span className="tag">Selbst bewerben oder mit uns?</span>
+            <h2 className="h2">Allein ist es <span className="b">ein Glücksspiel.</span></h2>
           </div>
-          <div className="vergleich">
+          <div className="vergleich" style={{ gridTemplateColumns: "1fr 1fr", maxWidth: 920, marginInline: "auto" }}>
             <div className="vergleich__col">
-              <span className="icon"><IcSearch /></span>
-              <h3>Jobbörse</h3>
-              <ul>{["Tausende Anzeigen, alle gleich", "Lebenslauf und Anschreiben", "Oft keine Rückmeldung", "Produkt und Provision unklar"].map((t) => <li key={t}><IcX />{t}</li>)}</ul>
+              <h3>Allein bewerben</h3>
+              <ul>{["Du weißt nicht, ob der Vertrieb seriös ist", "Unklar, ob die Provision wirklich kommt", "Einarbeitung ist Glückssache", "Lebenslauf, Anschreiben, Vorstellungsgespräch", "Passt es nicht, ist die Chance weg"].map((t) => <li key={t}><IcX />{t}</li>)}</ul>
             </div>
-            <div className="vergleich__col vergleich__col--top">
-              <span className="icon" style={{ background: "var(--brand)", color: "#1a1206", boxShadow: "none" }}><IcStar /></span>
-              <h3>Mit machvertrieb.de</h3>
-              <ul>{["Nur geprüfte Partner", "Transparente, gezahlte Provisionen", "Masterclass vor dem Start", "Mehrere Angebote, du wählst", "Nur noch Probetag", "Für dich kostenlos"].map((t) => <li key={t}><IcCheck />{t}</li>)}</ul>
-            </div>
-            <div className="vergleich__col">
-              <span className="icon"><IcUser /></span>
-              <h3>Beim Erstbesten anfangen</h3>
-              <ul>{["Keine Vergleichsmöglichkeit", "Einarbeitung ist Glückssache", "Passt es nicht, ist die Chance verspielt", "Allein, wenn es schiefgeht"].map((t) => <li key={t}><IcX />{t}</li>)}</ul>
+            <div className="vergleich__col vergleich__col--top" style={{ transform: "none" }}>
+              <h3>Über machvertrieb.de</h3>
+              <ul>{["Nur geprüfte, seriöse Partner", "Klare Provisionen, die gezahlt werden", "Kostenlose Vorbereitung vor dem Start", "Kein Lebenslauf, nur Probetag", "Mehrere Angebote, du entscheidest", "Für dich kostenlos"].map((t) => <li key={t}><IcCheck />{t}</li>)}</ul>
             </div>
           </div>
         </div>
       </section>
 
       {/* ================= FELIX ================= */}
-      <section id="felix" className="section section--soft">
+      <section id="felix" className="section" style={{ overflow: "hidden" }}>
+        <div className="motiv motiv--adler" aria-hidden="true" style={{ opacity: 0.5 }} />
         <div className="wrap felix">
           <div className="felix__bild" data-reveal>
             <Image src={felix} alt="Felix Zoepp" placeholder="blur" sizes="(max-width: 960px) 100vw, 40vw" />
-            <div className="felix__karte"><span className="icon icon--brand"><IcSpark /></span><div><b>Felix Zoepp</b><small>Gründer Zoepp Consulting · Initiator machvertrieb.de</small></div></div>
+            <div className="felix__karte"><GoldIcon name="ziel" size={44} /><div><b>Felix Zoepp</b><small>Gründer Zoepp Consulting · Initiator von machvertrieb.de</small></div></div>
           </div>
           <div className="head" style={{ maxWidth: "none" }}>
             <span className="tag">Wer dahinter steht</span>
             <h2 className="h2">Vom Zocker im Kinderzimmer <span className="b">zum Porsche mit 23.</span></h2>
-            <p className="lead">Kein reicher Papa, keine guten Noten, kein Plan. Nur die Entscheidung, verkaufen zu lernen. Heute baut Felix mit Zoepp Consulting den Vertrieb für über 100 Unternehmen auf.</p>
+            <p className="lead">Kein reicher Papa, keine guten Noten, kein Plan. Nur die Entscheidung, verkaufen zu lernen. Genau diese Chance will Felix mit machvertrieb.de an dich weitergeben.</p>
             <div className="zahlen">
               <div className="zahl"><b>3.<span> Monat</span></b><small>erstmals 10.000 € in einem Monat</small></div>
               <div className="zahl"><b>103</b><small>Vertriebe arbeiten mit seinem System</small></div>
@@ -360,14 +266,14 @@ export default function Home() {
                 </li>
               ))}
             </ol>
-            <p className="hinweis">Das ist Felix&apos; Weg, kein Einkommensversprechen. Was du verdienst, hängt von dir, deinem Einsatz und deinem Vertrieb ab.</p>
+            <p className="hinweis">Das ist Felix&apos; Weg, kein Einkommensversprechen.</p>
           </div>
         </div>
       </section>
 
       {/* ================= ERFAHRUNGEN (erst mit echten Videos sichtbar) ================= */}
       {STIMMEN.length > 0 && (
-        <section id="erfahrungen" className="section">
+        <section id="erfahrungen" className="section section--soft">
           <div className="wrap">
             <div className="head center"><span className="tag">Erfahrungen</span><h2 className="h2">Über uns gestartet. <span className="b">Heute erfolgreich.</span></h2></div>
             <div className="grid grid--3">
@@ -382,37 +288,13 @@ export default function Home() {
         </section>
       )}
 
-      {/* ================= TYPEN ================= */}
-      <section className="section">
-        <div className="wrap">
-          <div className="head center" data-reveal>
-            <span className="tag">Welcher Typ bist du?</span>
-            <h2 className="h2">Große Tickets oder <span className="b">viele Abschlüsse?</span></h2>
-            <p className="lead">Jeder Vertriebstyp hat seinen Platz. Im Match-Check finden wir heraus, welcher deiner ist.</p>
-          </div>
-          <div className="grid grid--3">
-            {TYPEN.map((t, k) => (
-              <div key={t.t} className="card" data-reveal style={{ ["--d" as string]: `${(k % 3) * 90}ms` }}>
-                <span className="icon icon--brand">{t.i}</span>
-                <h3>{t.t}</h3>
-                <p>{t.p}</p>
-                <div className="skala">
-                  <div className="skala__z"><span>Ticketgröße</span><Skala n={t.ticket} /></div>
-                  <div className="skala__z"><span>Termine pro Woche</span><Skala n={t.termine} /></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ================= JOBS ================= */}
       <section id="jobs" className="section section--soft">
         <div className="wrap">
           <div className="head" data-reveal>
-            <span className="tag">Aktuell gesucht</span>
-            <h2 className="h2">Offene Stellen <span className="b">bei Partnern</span></h2>
-            <p className="lead">Eine Auswahl. Die meisten Stellen vergeben wir direkt über den Match-Check, ohne dass sie hier stehen.</p>
+            <span className="tag">Gerade gesucht</span>
+            <h2 className="h2">Offene Stellen <span className="b">bei unseren Partnern</span></h2>
+            <p className="lead">Eine kleine Auswahl. Die meisten Stellen vergeben wir direkt, ohne dass sie hier stehen. Bewirb dich einfach, wir finden das Passende.</p>
           </div>
           <JobsBoard jobs={JOBS} />
         </div>
@@ -433,7 +315,6 @@ export default function Home() {
                 </Link>
               ))}
             </div>
-            <div className="cta-zeile"><Link href="/wissen" className="btn btn--ghost">Alle Artikel</Link></div>
           </div>
         </section>
       )}
@@ -441,29 +322,24 @@ export default function Home() {
       {/* ================= FAQ ================= */}
       <section id="faq" className="section section--soft">
         <div className="wrap">
-          <div className="head center"><span className="tag">FAQ</span><h2 className="h2">Ehrliche <span className="b">Antworten.</span></h2></div>
+          <div className="head center"><span className="tag">Fragen</span><h2 className="h2">Ehrliche <span className="b">Antworten.</span></h2></div>
           <Faq items={FAQ} />
         </div>
       </section>
 
       {/* ================= ABSCHLUSS ================= */}
-      <section className="section">
-        <div className="wrap">
-          <div className="banner">
-            <span className="tag tag--dunkel">Dein nächster Schritt</span>
-            <h2 className="h2">Die Frage ist nicht, ob du es kannst. <span style={{ color: "var(--brand-2)" }}>Sondern wo.</span></h2>
-            <p>2 Minuten Match-Check. Wir finden die Vertriebe, die zu dir passen. Du musst nur noch zum Probetag.</p>
-            <Link href="/bewerben" className="btn btn--brand">Kostenlosen Match-Check starten <Pfeil /></Link>
-            <div style={{ display: "flex", gap: 18, flexWrap: "wrap", justifyContent: "center", color: "rgba(255,255,255,0.6)", fontSize: 14 }}>
-              <span style={{ display: "inline-flex", gap: 6, alignItems: "center" }}><IcLock width={16} height={16} />Anonym vorgestellt</span>
-              <span style={{ display: "inline-flex", gap: 6, alignItems: "center" }}><IcShield width={16} height={16} />Nur geprüfte Partner</span>
-              <span style={{ display: "inline-flex", gap: 6, alignItems: "center" }}><IcBell width={16} height={16} />Für dich kostenlos</span>
-            </div>
+      <section style={{ padding: "clamp(64px, 8vw, 110px) 0" }}>
+        <div className="finale2">
+          <Image src={felix} alt="" sizes="55vw" />
+          <div className="finale2__inhalt">
+            <h2>Dein Neustart beginnt <span className="serif">mit 2 Minuten.</span></h2>
+            <p>Beantworte ein paar Fragen. Wir finden den Vertrieb, der zu dir passt. Du musst nur noch zum Probetag.</p>
+            <div><Link href="/bewerben" className="btn btn--brand">Jetzt Vertrieb finden, der zu mir passt <Pfeil /></Link></div>
           </div>
         </div>
       </section>
 
-      <div className="mobil-cta"><span>Match-Check · 2 Min.</span><Link href="/bewerben" className="btn btn--brand">Starten <Pfeil /></Link></div>
+      <div className="mobil-cta"><span>Passenden Vertrieb finden</span><Link href="/bewerben" className="btn btn--brand">Starten <Pfeil /></Link></div>
     </>
   );
 }

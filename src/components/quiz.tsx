@@ -20,22 +20,22 @@ type Frage = {
 const FRAGEN: Frage[] = [
   {
     id: "arbeitsstil",
-    titel: "Was ist dir wichtiger?",
-    hilfe: "Es gibt kein Richtig oder Falsch. Damit finden wir den Vertrieb, der zu deinem Stil passt.",
+    titel: "Wie willst du dein Geld verdienen?",
+    hilfe: "Es gibt kein Richtig oder Falsch. So finden wir die Art Vertrieb, die zu dir passt.",
     optionen: [
-      { v: "kleine_tickets", label: "Viele Abschlüsse, konstante Provision", emoji: <IcLayers />, hint: "Kleinere Tickets, dafür viele Termine und regelmäßiges Einkommen" },
-      { v: "grosse_tickets", label: "Wenige, aber große Tickets", emoji: <IcStar />, hint: "Weniger Termine, länger beim Kunden, hohe Provision pro Abschluss" },
+      { v: "kleine_tickets", label: "Viele Provisionen, jede Woche Geld", emoji: <IcLayers />, hint: "Viele Kunden, dafür regelmäßig Geld auf dem Konto" },
+      { v: "grosse_tickets", label: "Wenige, aber richtig große Provisionen", emoji: <IcStar />, hint: "Weniger Kunden, mehr Zeit pro Kunde, viel Geld pro Abschluss" },
       { v: "mix", label: "Eine Mischung aus beidem", emoji: <IcTarget /> },
     ],
   },
   {
     id: "rolle",
-    titel: "Was willst du am liebsten machen?",
+    titel: "Was machst du am liebsten?",
     optionen: [
-      { v: "closer", label: "Nur closen", emoji: <IcTarget />, hint: "Du bekommst Termine gestellt und schließt ab" },
-      { v: "full_cycle", label: "Kunden selbst finden und abschließen", emoji: <IcBolt />, hint: "Alles in einer Hand, maximale Kontrolle" },
-      { v: "leads", label: "Leads generieren, ohne zu verkaufen", emoji: <IcSignal />, hint: "Interessenten finden und Termine legen" },
-      { v: "abwechslung", label: "Abwechslung, gern alles", emoji: <IcLayers /> },
+      { v: "closer", label: "Termine bekommen und abschließen", emoji: <IcTarget />, hint: "Du bekommst feste Termine und konzentrierst dich aufs Verkaufen" },
+      { v: "full_cycle", label: "Kunden selbst ansprechen und abschließen", emoji: <IcBolt />, hint: "Zum Beispiel an der Haustür, alles in deiner Hand" },
+      { v: "leads", label: "Interessenten finden, ohne zu verkaufen", emoji: <IcSignal />, hint: "Leute mit Interesse finden und Termine machen" },
+      { v: "abwechslung", label: "Von allem etwas", emoji: <IcLayers /> },
     ],
   },
   {
@@ -57,7 +57,7 @@ const FRAGEN: Frage[] = [
     id: "erfahrung",
     titel: "Wie viel Vertriebserfahrung hast du?",
     optionen: [
-      { v: "0", label: "Keine, ich steige quer ein", emoji: <IcSpark />, hint: "Kein Problem. Dafür gibt es die Masterclass." },
+      { v: "0", label: "Keine, ich steige quer ein", emoji: <IcSpark />, hint: "Kein Problem. Dafür gibt es unsere Vorbereitung." },
       { v: "0.5", label: "Weniger als 1 Jahr", emoji: <IcBolt /> },
       { v: "2", label: "1 bis 3 Jahre", emoji: <IcBriefcase /> },
       { v: "4", label: "Mehr als 3 Jahre", emoji: <IcTrophy /> },
@@ -312,7 +312,7 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
 
   return (
     <div className="quiz">
-      <p className="quiz__intro"><strong>Match-Check:</strong> Wir suchen für dich das Beste raus.</p>
+      <p className="quiz__intro"><strong>Finde deinen Vertrieb:</strong> Wir suchen für dich das Beste raus.</p>
       <div className="quiz__top">
         <span>{position > 0 && phase !== "lader" ? <button type="button" className="quiz__zurueck" onClick={zurueck}>← Zurück</button> : "2 Minuten"}</span>
         <span>Schritt {Math.min(position + 1, gesamt)} von {gesamt}</span>
