@@ -230,8 +230,9 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
           <div className="danke__haken">✓</div>
           <h1 style={{ margin: "8px 0 0" }}>Danke, {k.vorname.trim()}! Deine Bewerbung ist da.</h1>
           <p className="quiz__hilfe">
-            Wir schauen uns deine Angaben an und melden uns telefonisch bei dir. Halte dein Handy in den nächsten Tagen in der Nähe.
-            Bis dahin kannst du dich schon mal einlesen:
+            So geht es weiter: Wir rufen dich für ein kurzes Kennenlern-Telefonat an. Passt es, schalten wir dir danach die Masterclass
+            frei, und sobald du vorbereitet bist, melden sich passende Vertriebe aus deiner Region bei dir. Halte dein Handy in den
+            nächsten Tagen in der Nähe. Bis dahin kannst du dich schon mal einlesen:
           </p>
           <div style={{ display: "grid", gap: 10, width: "100%", maxWidth: 420 }}>
             <Link className="btn btn--ghost" href="/wissen/probetag-im-vertrieb">So läuft ein Probetag ab</Link>

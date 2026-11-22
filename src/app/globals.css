@@ -393,3 +393,20 @@ button { font: inherit; }
 .rechtstext ul { padding-left: 1.2em; }
 @media (max-width: 960px) { .visual { margin: 12px 8px 0; } .visual__bg { inset: -4% -4% -6% 6%; } }
 .toc-cta .btn { color: #fff; }
+
+/* Ablauf mit 6 Schritten */
+.ablauf--6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 960px) { .ablauf--6 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .ablauf--6 { grid-template-columns: 1fr; } }
+.ablauf li:nth-child(5)::before, .ablauf li:nth-child(6)::before { color: var(--red); }
+
+/* Masterclass */
+.section--dark .mark { background: var(--yellow); color: var(--ink); border-radius: 8px; padding: 0 0.15em; }
+.mc { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
+@media (max-width: 960px) { .mc { grid-template-columns: 1fr; } }
+.mc__checks li { color: #fff; }
+.module { list-style: none; display: grid; gap: 10px; }
+.module li { display: flex; gap: 16px; align-items: flex-start; background: var(--dark-2); border-radius: 18px; padding: 18px 20px; }
+.module__nr { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--yellow); color: var(--ink); font-weight: 800; font-size: 14px; }
+.module h3 { color: #fff; font-size: 17px; line-height: 1.25; letter-spacing: -0.01em; }
+.module p { color: rgba(255, 255, 255, 0.62); font-size: 14.5px; margin-top: 3px; }

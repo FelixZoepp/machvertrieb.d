@@ -36,11 +36,25 @@ const ROLLEN = [
 
 const BRANCHEN_BAND = ["Glasfaser", "Strom & Gas", "Photovoltaik", "Telekommunikation", "Versicherung", "Finanzen", "Immobilien", "Quereinstieg"];
 
+// Prinzip der Vermittlung: vorqualifizieren → vorbereiten (Masterclass) → Vertriebe melden sich → nur noch Probetag und Start
 const SCHRITTE = [
   { t: "2-Minuten-Check", z: "Online, jetzt", p: "Ein paar Klicks zu dir, deinen Wünschen und deiner Postleitzahl. Kein Lebenslauf, kein Anschreiben." },
-  { t: "Wir rufen dich an", z: "Telefonat", p: "Wir lernen dich kennen und klären, was zu dir passt: Branche, Region, Vollzeit oder nebenbei." },
-  { t: "Passende Vertriebe", z: "In deiner Region", p: "Wir stellen dich Vertrieben vor, die in deiner Nähe Leute suchen und wirklich einarbeiten." },
-  { t: "Probetag und Start", z: "Du entscheidest", p: "Du lernst Team und Alltag vor Ort kennen. Passt es, startest du mit Einarbeitung." },
+  { t: "Kennenlern-Telefonat", z: "Vorqualifizierung", p: "Wir rufen dich an und klären, was zu dir passt: Branche, Region, Vollzeit oder nebenbei. Danach weißt du, ob es passt." },
+  { t: "Deine Vorbereitung", z: "Online, ca. 1 Stunde", p: "Wir schalten dir unsere Masterclass frei: Mindset, die Kernqualitäten guter Vertriebler und wie du im Gespräch überzeugst." },
+  { t: "Vertriebe melden sich", z: "Du entscheidest", p: "Bist du vorbereitet, stellen wir dich passenden Vertrieben in deiner Region vor. Die rufen dich an, du suchst dir aus, wer zu dir passt." },
+  { t: "Probetag", z: "Vor Ort", p: "Du lernst Team und Alltag kennen. Kein klassisches Vorstellungsgespräch mehr, du bist ja schon vorbereitet." },
+  { t: "Start", z: "Mit Einarbeitung", p: "Passt es für beide Seiten, startest du mit Einarbeitung im Team. Wir bleiben auch danach dein Ansprechpartner." },
+];
+
+const MODULE = [
+  { t: "Dein Weg in den Vertrieb", p: "Was dich erwartet, wie die Vermittlung abläuft und was du von uns bekommst." },
+  { t: "Mindset im Vertrieb", p: "Was erfolgreiche Vertriebler anders machen, wie du mit einem Nein umgehst und dranbleibst." },
+  { t: "Die 5 Kernqualitäten", p: "Welche Eigenschaften einen guten Vertriebler ausmachen und wie du sie trainierst." },
+  { t: "Unser Qualitätsstandard", p: "Warum wir nur an Vertriebe vermitteln, die wirklich einarbeiten, und was wir von dir erwarten." },
+  { t: "Von der Bewerbung bis zur Einstellung", p: "Jeder Schritt bis zu deinem ersten Arbeitstag, ohne Überraschungen." },
+  { t: "So überzeugst du im Gespräch", p: "Was unseren Partnern wichtig ist und wie du beim Telefonat und Probetag punktest." },
+  { t: "Realistische Verdienstmöglichkeiten", p: "Wie Verdienst im Vertrieb entsteht, was realistisch ist und woran du faire Modelle erkennst." },
+  { t: "Deine nächsten Schritte", p: "Was nach der Vorbereitung passiert und wie die Vertriebe auf dich zukommen." },
 ];
 
 const FAQ = [
@@ -49,7 +63,9 @@ const FAQ = [
   { q: "Brauche ich einen Lebenslauf?", a: "Nein. Für die Bewerbung reichen die Antworten im 2-Minuten-Check und deine Kontaktdaten. Alles Weitere klären wir im Telefonat." },
   { q: "Wie viel verdient man im Vertrieb?", a: "Das hängt von Branche, Modell und deiner Leistung ab. Manche Stellen haben ein Fixum plus Provision, andere zahlen pro Kunde oder pro Termin. Bei den offenen Stellen siehst du, was der jeweilige Vertrieb angibt. Mehr dazu im Ratgeber zum Verdienst für Einsteiger." },
   { q: "Kann ich auch nebenberuflich oder in Teilzeit anfangen?", a: "Bei vielen Partnern ja. Gib im Check einfach an, wie du arbeiten möchtest. Dann schlagen wir dir nur Vertriebe vor, bei denen das passt." },
-  { q: "Wie schnell meldet ihr euch?", a: "Wir sehen uns jede Bewerbung an und melden uns telefonisch, sobald wir einen passenden Vertrieb in deiner Region sehen. Halte dein Handy also in der Nähe." },
+  { q: "Wie schnell meldet ihr euch?", a: "Wir sehen uns jede Bewerbung an und melden uns telefonisch für das Kennenlern-Telefonat. Halte dein Handy also in der Nähe." },
+  { q: "Was ist die Masterclass und muss ich sie machen?", a: "Die Masterclass ist eine kurze Online-Vorbereitung in 8 Videos, insgesamt etwa eine Stunde. Du lernst Mindset, die Kernqualitäten guter Vertriebler und wie du im Gespräch überzeugst. Sie ist für dich kostenlos und die Voraussetzung dafür, dass wir dich Vertrieben vorstellen. So startest du nicht bei null und musst nur noch zum Probetag." },
+  { q: "Muss ich mich bei jedem Vertrieb einzeln bewerben?", a: "Nein. Du bewirbst dich einmal bei uns. Nach deiner Vorbereitung stellen wir dich passenden Vertrieben in deiner Region vor, und die melden sich bei dir. Du entscheidest, zu wem du zum Probetag gehst." },
   { q: "Was passiert mit meinen Daten?", a: "Wir nutzen deine Angaben nur, um dir passende Stellen vorzuschlagen, und geben dein Profil nur an Vertriebe weiter, die zu dir passen. Du kannst deine Einwilligung jederzeit widerrufen." },
 ];
 
@@ -68,14 +84,14 @@ export default function Home() {
               Mach Vertrieb. Verdien nach <span className="mark">Leistung</span>, nicht nach Stechuhr.
             </h1>
             <p className="lead">
-              Wir bringen dich mit Vertrieben in deiner Region zusammen, die Leute suchen und wirklich einarbeiten. In Glasfaser,
-              Energie, Photovoltaik, Versicherung und Immobilien. Auch ohne Erfahrung.
+              Du bewirbst dich einmal. Wir bereiten dich mit unserer Masterclass auf Mindset und Gespräch vor, und dann melden sich
+              passende Vertriebe aus deiner Region bei dir. Du musst nur noch zum Probetag und starten. Auch ohne Erfahrung.
             </p>
             <ul className="checks">
               <li>Bewerbung in 2 Minuten, ohne Lebenslauf</li>
-              <li>Vollzeit, Teilzeit oder nebenberuflich</li>
-              <li>Für dich komplett kostenlos</li>
-              <li>Jobs in deiner Nähe statt quer durchs Land</li>
+              <li>Kostenlose Vorbereitung: Mindset, Gesprächsführung, Verdienst</li>
+              <li>Vertriebe melden sich bei dir, du entscheidest</li>
+              <li>Vollzeit, Teilzeit oder nebenberuflich, für dich kostenlos</li>
             </ul>
             <div className="hero__cta">
               <Link href="/bewerben" className="btn btn--red">Jetzt in 2 Minuten bewerben <Pfeil /></Link>
@@ -92,9 +108,10 @@ export default function Home() {
                 <span className="live">LIVE</span>
               </div>
               <div className="schritt ok"><span className="schritt__nr">✓</span><div><div className="schritt__t">2-Minuten-Check</div><div className="schritt__s">Quereinstieg · Vollzeit · PLZ 10365</div></div><span className="schritt__status">Erledigt</span></div>
-              <div className="schritt ok"><span className="schritt__nr">✓</span><div><div className="schritt__t">Telefonat</div><div className="schritt__s">Wünsche und Region geklärt</div></div><span className="schritt__status">Erledigt</span></div>
-              <div className="schritt aktiv"><span className="schritt__nr">3</span><div><div className="schritt__t">Passende Vertriebe</div><div className="schritt__s">Glasfaser · Photovoltaik · 30 km</div></div><span className="schritt__status">Läuft</span></div>
-              <div className="schritt"><span className="schritt__nr">4</span><div><div className="schritt__t">Probetag</div><div className="schritt__s">Team und Alltag kennenlernen</div></div><span className="schritt__status">Bald</span></div>
+              <div className="schritt ok"><span className="schritt__nr">✓</span><div><div className="schritt__t">Kennenlern-Telefonat</div><div className="schritt__s">Wünsche und Region geklärt</div></div><span className="schritt__status">Erledigt</span></div>
+              <div className="schritt ok"><span className="schritt__nr">✓</span><div><div className="schritt__t">Masterclass</div><div className="schritt__s">8 von 8 Modulen · Mindset sitzt</div></div><span className="schritt__status">Erledigt</span></div>
+              <div className="schritt aktiv"><span className="schritt__nr">4</span><div><div className="schritt__t">Vertriebe melden sich</div><div className="schritt__s">Glasfaser · Photovoltaik · 30 km</div></div><span className="schritt__status">Läuft</span></div>
+              <div className="schritt"><span className="schritt__nr">5</span><div><div className="schritt__t">Probetag und Start</div><div className="schritt__s">Du entscheidest, wo</div></div><span className="schritt__status">Bald</span></div>
               <div className="tag-chips">
                 <span className="chip chip--y">Quereinstieg</span><span className="chip">Einarbeitung</span><span className="chip chip--r">Verdienst nach Leistung</span>
               </div>
@@ -178,10 +195,10 @@ export default function Home() {
         <div className="wrap">
           <div className="head center">
             <span className="eyebrow">So funktioniert&apos;s</span>
-            <h2 className="h2">In vier Schritten zu deinem Job im Vertrieb</h2>
-            <p className="lead">Statt dutzende Bewerbungen zu schreiben, bewirbst du dich einmal. Den Rest machen wir mit dir zusammen.</p>
+            <h2 className="h2">Einmal bewerben. Vorbereitet zum <span className="mark">Probetag</span>.</h2>
+            <p className="lead">Statt dutzende Bewerbungen zu schreiben und dich in Vorstellungsgesprächen zu verkaufen, bewirbst du dich einmal. Wir qualifizieren dich vor, bereiten dich vor und bringen die Vertriebe zu dir.</p>
           </div>
-          <ol className="ablauf">
+          <ol className="ablauf ablauf--6">
             {SCHRITTE.map((s) => (
               <li key={s.t}>
                 <span className="zeit">{s.z}</span>
@@ -192,6 +209,38 @@ export default function Home() {
           </ol>
           <div className="after-cta"><Link href="/bewerben" className="btn btn--red">Schritt 1 starten <Pfeil /></Link></div>
         </div>
+      </section>
+
+      {/* VORBEREITUNG / MASTERCLASS */}
+      <section id="vorbereitung" className="section section--dark">
+        <div className="wrap mc">
+          <div className="head">
+            <span className="eyebrow">Deine Vorbereitung</span>
+            <h2 className="h2">Du startest nicht bei null. Du startest <span className="mark">vorbereitet</span>.</h2>
+            <p className="lead">
+              Bevor dich ein Vertrieb kennenlernt, bekommst du unsere Masterclass: 8 kurze Videos, insgesamt etwa eine Stunde, online und
+              kostenlos. Danach weißt du, wie Vertrieb funktioniert, was von dir erwartet wird und wie du im Probetag überzeugst. Die
+              Vertriebe wissen das auch und melden sich deshalb gezielt bei dir.
+            </p>
+            <ul className="checks mc__checks">
+              <li>Das richtige Mindset, bevor der erste Kunde Nein sagt</li>
+              <li>Kein Vorstellungsgespräch mehr, nur noch Probetag</li>
+              <li>Realistische Erwartungen statt leerer Versprechen</li>
+            </ul>
+          </div>
+          <ol className="module">
+            {MODULE.map((m, i) => (
+              <li key={m.t}>
+                <span className="module__nr">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3>{m.t}</h3>
+                  <p>{m.p}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="wrap after-cta"><Link href="/bewerben" className="btn btn--yellow">Vorbereitung freischalten <Pfeil /></Link></div>
       </section>
 
       {/* JOBS */}
@@ -228,12 +277,13 @@ export default function Home() {
             </div>
             <div className="vergleich__col vergleich__col--top">
               <span className="eyebrow">Mit machvertrieb.de</span>
-              <h3>Einmal bewerben, passend vorgestellt</h3>
+              <h3>Einmal bewerben, vorbereitet starten</h3>
               <ul>
                 <li>2-Minuten-Check statt Lebenslauf</li>
                 <li>Persönliches Telefonat statt Funkstille</li>
-                <li>Nur Vertriebe in deiner Region</li>
-                <li>Probetag, bevor du dich entscheidest</li>
+                <li>Masterclass: vorbereitet statt ins kalte Wasser</li>
+                <li>Vertriebe aus deiner Region melden sich bei dir</li>
+                <li>Nur noch Probetag und Start</li>
                 <li>Für dich kostenlos</li>
               </ul>
             </div>
