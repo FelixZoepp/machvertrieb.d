@@ -15,6 +15,8 @@ export function Effekte() {
       { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
     );
     reveal.forEach((el) => io.observe(el));
+    // Sicherheitsnetz: nach 2,5 s alles sichtbar, falls der Observer nicht feuert (Crawler, Headless)
+    const netz = window.setTimeout(() => reveal.forEach((el) => el.classList.add("sichtbar")), 2500);
 
     const para = Array.from(document.querySelectorAll<HTMLElement>("[data-parallax]"));
     let raf = 0;
@@ -59,6 +61,7 @@ export function Effekte() {
 
     return () => {
       io.disconnect();
+      clearTimeout(netz);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       handlers.forEach((h) => h());

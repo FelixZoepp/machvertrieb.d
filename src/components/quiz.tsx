@@ -2,9 +2,9 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { leseTracking } from "./tracking";
-import { Pfeil } from "./icons";
+import { Pfeil, IcBolt, IcBriefcase, IcBuilding, IcCalendar, IcCap, IcCar, IcCheck, IcClock, IcFile, IcHome, IcLayers, IcLock, IcPin, IcShield, IcSignal, IcSpark, IcStar, IcSun, IcTarget, IcTrophy, IcUsers, IcWallet, IcWifi, IcX } from "./icons";
 
-type Opt = { v: string; label: string; emoji: string; hint?: string };
+type Opt = { v: string; label: string; emoji: React.ReactNode; hint?: string };
 type Frage = {
   id: string;
   titel: string;
@@ -23,19 +23,19 @@ const FRAGEN: Frage[] = [
     titel: "Was ist dir wichtiger?",
     hilfe: "Es gibt kein Richtig oder Falsch. Damit finden wir den Vertrieb, der zu deinem Stil passt.",
     optionen: [
-      { v: "kleine_tickets", label: "Viele Abschlüsse, konstante Provision", emoji: "🔁", hint: "Kleinere Tickets, dafür viele Termine und regelmäßiges Einkommen" },
-      { v: "grosse_tickets", label: "Wenige, aber große Tickets", emoji: "💎", hint: "Weniger Termine, länger beim Kunden, hohe Provision pro Abschluss" },
-      { v: "mix", label: "Eine Mischung aus beidem", emoji: "⚖️" },
+      { v: "kleine_tickets", label: "Viele Abschlüsse, konstante Provision", emoji: <IcLayers />, hint: "Kleinere Tickets, dafür viele Termine und regelmäßiges Einkommen" },
+      { v: "grosse_tickets", label: "Wenige, aber große Tickets", emoji: <IcStar />, hint: "Weniger Termine, länger beim Kunden, hohe Provision pro Abschluss" },
+      { v: "mix", label: "Eine Mischung aus beidem", emoji: <IcTarget /> },
     ],
   },
   {
     id: "rolle",
     titel: "Was willst du am liebsten machen?",
     optionen: [
-      { v: "closer", label: "Nur closen", emoji: "🎯", hint: "Du bekommst Termine gestellt und schließt ab" },
-      { v: "full_cycle", label: "Kunden selbst finden und abschließen", emoji: "🚀", hint: "Alles in einer Hand, maximale Kontrolle" },
-      { v: "leads", label: "Leads generieren, ohne zu verkaufen", emoji: "🧲", hint: "Interessenten finden und Termine legen" },
-      { v: "abwechslung", label: "Abwechslung, gern alles", emoji: "🔀" },
+      { v: "closer", label: "Nur closen", emoji: <IcTarget />, hint: "Du bekommst Termine gestellt und schließt ab" },
+      { v: "full_cycle", label: "Kunden selbst finden und abschließen", emoji: <IcBolt />, hint: "Alles in einer Hand, maximale Kontrolle" },
+      { v: "leads", label: "Leads generieren, ohne zu verkaufen", emoji: <IcSignal />, hint: "Interessenten finden und Termine legen" },
+      { v: "abwechslung", label: "Abwechslung, gern alles", emoji: <IcLayers /> },
     ],
   },
   {
@@ -45,22 +45,22 @@ const FRAGEN: Frage[] = [
     multi: true,
     zweispaltig: true,
     optionen: [
-      { v: "Glasfaser & Telekommunikation", label: "Glasfaser & Telekom", emoji: "📡" },
-      { v: "Energie", label: "Strom & Gas", emoji: "⚡" },
-      { v: "Photovoltaik", label: "Photovoltaik", emoji: "☀️" },
-      { v: "Versicherung & Finanzen", label: "Versicherung & Finanzen", emoji: "🛡️" },
-      { v: "Immobilien", label: "Immobilien", emoji: "🏠" },
-      { v: "offen", label: "Egal, Hauptsache es lohnt sich", emoji: "✨" },
+      { v: "Glasfaser & Telekommunikation", label: "Glasfaser & Telekom", emoji: <IcWifi /> },
+      { v: "Energie", label: "Strom & Gas", emoji: <IcBolt /> },
+      { v: "Photovoltaik", label: "Photovoltaik", emoji: <IcSun /> },
+      { v: "Versicherung & Finanzen", label: "Versicherung & Finanzen", emoji: <IcShield /> },
+      { v: "Immobilien", label: "Immobilien", emoji: <IcHome /> },
+      { v: "offen", label: "Egal, Hauptsache es lohnt sich", emoji: <IcSpark /> },
     ],
   },
   {
     id: "erfahrung",
     titel: "Wie viel Vertriebserfahrung hast du?",
     optionen: [
-      { v: "0", label: "Keine, ich steige quer ein", emoji: "🌱", hint: "Kein Problem. Dafür gibt es die Masterclass." },
-      { v: "0.5", label: "Weniger als 1 Jahr", emoji: "🚀" },
-      { v: "2", label: "1 bis 3 Jahre", emoji: "💼" },
-      { v: "4", label: "Mehr als 3 Jahre", emoji: "🏆" },
+      { v: "0", label: "Keine, ich steige quer ein", emoji: <IcSpark />, hint: "Kein Problem. Dafür gibt es die Masterclass." },
+      { v: "0.5", label: "Weniger als 1 Jahr", emoji: <IcBolt /> },
+      { v: "2", label: "1 bis 3 Jahre", emoji: <IcBriefcase /> },
+      { v: "4", label: "Mehr als 3 Jahre", emoji: <IcTrophy /> },
     ],
   },
   {
@@ -69,12 +69,12 @@ const FRAGEN: Frage[] = [
     hilfe: "Manche Partner haben Vorgaben, zum Beispiel im Finanzbereich. So stellen wir dich nur dort vor, wo es passt.",
     zweispaltig: true,
     optionen: [
-      { v: "kein", label: "Kein Abschluss", emoji: "➖" },
-      { v: "hauptschule", label: "Hauptschulabschluss", emoji: "📗" },
-      { v: "realschule", label: "Realschule / MSA", emoji: "📘" },
-      { v: "abitur", label: "Abitur / Fachabitur", emoji: "📙" },
-      { v: "ausbildung", label: "Abgeschlossene Ausbildung", emoji: "🛠️" },
-      { v: "studium", label: "Studium", emoji: "🎓" },
+      { v: "kein", label: "Kein Abschluss", emoji: <IcX /> },
+      { v: "hauptschule", label: "Hauptschulabschluss", emoji: <IcFile /> },
+      { v: "realschule", label: "Realschule / MSA", emoji: <IcFile /> },
+      { v: "abitur", label: "Abitur / Fachabitur", emoji: <IcFile /> },
+      { v: "ausbildung", label: "Abgeschlossene Ausbildung", emoji: <IcBriefcase /> },
+      { v: "studium", label: "Studium", emoji: <IcCap /> },
     ],
   },
   {
@@ -82,8 +82,8 @@ const FRAGEN: Frage[] = [
     titel: "Wie willst du arbeiten?",
     hilfe: "Unsere Partner suchen Leute, die es ernst meinen. Nebenberufliche Stellen vermitteln wir nicht.",
     optionen: [
-      { v: "vollzeit", label: "Vollzeit", emoji: "🔥", hint: "Volle Energie, volles Potenzial" },
-      { v: "teilzeit", label: "Teilzeit", emoji: "⏳" },
+      { v: "vollzeit", label: "Vollzeit", emoji: <IcBolt />, hint: "Volle Energie, volles Potenzial" },
+      { v: "teilzeit", label: "Teilzeit", emoji: <IcClock /> },
     ],
   },
   {
@@ -92,11 +92,11 @@ const FRAGEN: Frage[] = [
     hilfe: "Sei ehrlich zu dir. Wir suchen die Vertriebe raus, bei denen dein Ziel realistisch drin ist.",
     zweispaltig: true,
     optionen: [
-      { v: "bis_2500", label: "Bis 2.500 €", emoji: "💶" },
-      { v: "2500_4000", label: "2.500 bis 4.000 €", emoji: "💶" },
-      { v: "4000_6000", label: "4.000 bis 6.000 €", emoji: "💰" },
-      { v: "6000_10000", label: "6.000 bis 10.000 €", emoji: "💰" },
-      { v: "ueber_10000", label: "Mehr als 10.000 €", emoji: "🏆" },
+      { v: "bis_2500", label: "Bis 2.500 €", emoji: <IcWallet /> },
+      { v: "2500_4000", label: "2.500 bis 4.000 €", emoji: <IcWallet /> },
+      { v: "4000_6000", label: "4.000 bis 6.000 €", emoji: <IcWallet /> },
+      { v: "6000_10000", label: "6.000 bis 10.000 €", emoji: <IcWallet /> },
+      { v: "ueber_10000", label: "Mehr als 10.000 €", emoji: <IcTrophy /> },
     ],
   },
   {
@@ -106,13 +106,13 @@ const FRAGEN: Frage[] = [
     multi: true,
     zweispaltig: true,
     optionen: [
-      { v: "familie", label: "Meine Familie absichern", emoji: "👨‍👩‍👧" },
-      { v: "zuhause", label: "Eigene Wohnung oder Haus", emoji: "🏡" },
-      { v: "schulden", label: "Schulden loswerden", emoji: "🔓" },
-      { v: "freiheit", label: "Freiheit und Reisen", emoji: "✈️" },
-      { v: "lifestyle", label: "Auto und Lifestyle", emoji: "🏎️" },
-      { v: "business", label: "Eigenes Business aufbauen", emoji: "🏢" },
-      { v: "beweisen", label: "Mir selbst was beweisen", emoji: "💪" },
+      { v: "familie", label: "Meine Familie absichern", emoji: <IcUsers /> },
+      { v: "zuhause", label: "Eigene Wohnung oder Haus", emoji: <IcHome /> },
+      { v: "schulden", label: "Schulden loswerden", emoji: <IcLock /> },
+      { v: "freiheit", label: "Freiheit und Reisen", emoji: <IcPin /> },
+      { v: "lifestyle", label: "Auto und Lifestyle", emoji: <IcCar /> },
+      { v: "business", label: "Eigenes Business aufbauen", emoji: <IcBuilding /> },
+      { v: "beweisen", label: "Mir selbst was beweisen", emoji: <IcTrophy /> },
     ],
     freitext: { label: "Erzähl uns mehr (optional)", platzhalter: "Was würdest du mit dem Geld als Erstes machen?" },
   },
@@ -120,18 +120,18 @@ const FRAGEN: Frage[] = [
     id: "mobilitaet",
     titel: "Hast du Führerschein und Auto?",
     optionen: [
-      { v: "auto", label: "Führerschein und eigenes Auto", emoji: "🚗" },
-      { v: "fuehrerschein", label: "Führerschein, aber kein Auto", emoji: "🪪" },
-      { v: "keiner", label: "Keinen Führerschein", emoji: "🚆" },
+      { v: "auto", label: "Führerschein und eigenes Auto", emoji: <IcCar /> },
+      { v: "fuehrerschein", label: "Führerschein, aber kein Auto", emoji: <IcFile /> },
+      { v: "keiner", label: "Keinen Führerschein", emoji: <IcPin /> },
     ],
   },
   {
     id: "start",
     titel: "Wann kannst du starten?",
     optionen: [
-      { v: "sofort", label: "Sofort", emoji: "⚡" },
-      { v: "2-4wochen", label: "In 2 bis 4 Wochen", emoji: "📅" },
-      { v: "1-3monate", label: "In 1 bis 3 Monaten", emoji: "🗓️" },
+      { v: "sofort", label: "Sofort", emoji: <IcBolt /> },
+      { v: "2-4wochen", label: "In 2 bis 4 Wochen", emoji: <IcCalendar /> },
+      { v: "1-3monate", label: "In 1 bis 3 Monaten", emoji: <IcCalendar /> },
     ],
   },
   {
@@ -139,17 +139,17 @@ const FRAGEN: Frage[] = [
     titel: "Wie gut ist dein Deutsch?",
     hilfe: "Im Vertrieb sprichst du den ganzen Tag mit Kunden.",
     optionen: [
-      { v: "muttersprache", label: "Muttersprache oder fließend", emoji: "💬" },
-      { v: "gut", label: "Gut, ich verstehe fast alles", emoji: "🙂" },
-      { v: "grundkenntnisse", label: "Grundkenntnisse", emoji: "📘" },
+      { v: "muttersprache", label: "Muttersprache oder fließend", emoji: <IcUsers /> },
+      { v: "gut", label: "Gut, ich verstehe fast alles", emoji: <IcCheck /> },
+      { v: "grundkenntnisse", label: "Grundkenntnisse", emoji: <IcFile /> },
     ],
   },
   {
     id: "alter",
     titel: "Bist du mindestens 18 Jahre alt?",
     optionen: [
-      { v: "ja", label: "Ja", emoji: "✅" },
-      { v: "nein", label: "Nein", emoji: "✋" },
+      { v: "ja", label: "Ja", emoji: <IcCheck /> },
+      { v: "nein", label: "Nein", emoji: <IcX /> },
     ],
     stopp: { v: "nein", text: "Danke für dein Interesse! Unsere Partner stellen nur ab 18 Jahren ein. Komm gern wieder, sobald es so weit ist." },
   },
@@ -281,7 +281,7 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
     return (
       <div className="quiz">
         <div className="danke">
-          <div className="danke__haken">🙌</div>
+          <div className="danke__haken"><IcX /></div>
           <h2 style={{ margin: 0 }}>Fast, aber noch nicht ganz</h2>
           <p className="quiz__hilfe">{gestoppt}</p>
           <Link href="/wissen" className="btn btn--ghost">Zum Ratgeber</Link>
@@ -295,7 +295,7 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
       <div className="quiz">
         <div className="quiz__fortschritt"><div style={{ width: "100%" }} /></div>
         <div className="danke">
-          <div className="danke__haken">✓</div>
+          <div className="danke__haken"><IcCheck /></div>
           <h1 style={{ margin: "8px 0 0" }}>Stark, {k.vorname.trim()}. Du bist drin.</h1>
           <p className="quiz__hilfe">
             So geht es weiter: Wir rufen dich in den nächsten Tagen für ein kurzes Kennenlern-Telefonat an. Danach schalten wir dir die
@@ -363,7 +363,7 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
             <div className="optionen optionen--2" role="radiogroup" aria-label="Umkreis">
               {UMKREIS.map((u) => (
                 <button key={u.v} type="button" role="radio" className="option" aria-checked={umkreis === u.v} onClick={() => setUmkreis(u.v)}>
-                  <span className="option__emoji" aria-hidden="true">📍</span><span>{u.label}</span>
+                  <span className="option__emoji" aria-hidden="true"><IcPin /></span><span>{u.label}</span>
                 </button>
               ))}
             </div>
@@ -387,7 +387,7 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
       {phase === "kontakt" && (
         <section>
           <div className="treffer" role="status">
-            <span className="treffer__icon">✓</span>
+            <span className="treffer__icon"><IcCheck /></span>
             <div>
               <strong>Wir haben passende Vertriebe für dich.</strong>
               <span>Dein Profil passt zu Partnern rund um {plz}, die gerade Verstärkung suchen und bei denen du sofort starten kannst.</span>
@@ -419,7 +419,7 @@ export function Quiz({ stelle, stelleTitel }: { stelle?: string; stelleTitel?: s
               {status === "sendet" ? "Wird gesendet …" : <>Profil an passende Vertriebe senden <Pfeil /></>}
             </button>
             {status === "fehler" && <div className="quiz__fehler" role="alert">Das hat leider nicht geklappt. Bitte versuch es gleich noch einmal.</div>}
-            <div className="quiz__vertrauen"><span>🔒 Anonym vorgestellt</span><span>✦ Nur geprüfte Partner</span><span>💶 Für dich kostenlos</span></div>
+            <div className="quiz__vertrauen"><span><IcLock />Anonym vorgestellt</span><span><IcShield />Nur geprüfte Partner</span><span><IcWallet />Für dich kostenlos</span></div>
           </form>
         </section>
       )}

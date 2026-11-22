@@ -29,7 +29,7 @@ export function JobsBoard({ jobs }: { jobs: Job[] }) {
                 {j.quereinstieg && <span className="chip chip--y">Quereinstieg möglich</span>}
               </div>
             </div>
-            <Link className="btn btn--red" href={`/bewerben?stelle=${j.slug}`}>Bewerben <Pfeil /></Link>
+            <Link className="btn btn--brand" href={`/bewerben?stelle=${j.slug}`}>Bewerben <Pfeil /></Link>
           </article>
         ))}
       </div>
