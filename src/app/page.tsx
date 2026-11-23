@@ -4,6 +4,7 @@ import Image from "next/image";
 import { STIMMEN } from "@/lib/stimmen";
 import { Faq, JsonLd, faqSchema } from "@/components/faq";
 import { Bento } from "@/components/bento";
+import { VermittlungScreen } from "@/components/vermittlung-screen";
 import { Karte } from "@/components/karte";
 import { LogoLeiste } from "@/components/logo-leiste";
 import { Zaehler } from "@/components/zaehler";
@@ -53,7 +54,7 @@ const KRITERIEN = [
 type Medium = { src: string; alt: string; pos?: string; video?: string; text?: string };
 const STORY: { i: React.ReactNode; j: string; t: string; p: string; medien?: Medium[] }[] = [
   { i: <IcBolt />, j: "2018", t: "„Aus mir wird nichts.“", p: "Schlechte Noten, jeden Tag gezockt, kein Plan. Ich habe mir selbst gesagt, dass aus mir nichts wird.",
-    medien: [{ src: "/img/laufbahn/2018.jpg", alt: "Felix als Jugendlicher", pos: "50% 22%" }] },
+    medien: [{ src: "/img/laufbahn/2018.jpg", alt: "Felix als Jugendlicher", pos: "50% 12%" }] },
   { i: <IcCap />, j: "2021", t: "Studium. Gezwungenermaßen.", p: "Nebenbei Social-Media-Beiträge, Videokurse für 50 €. Eineinhalb Jahre rumgedümpelt, ohne wirklich Geld zu verdienen.",
     medien: [{ src: "/img/laufbahn/2021.jpg", alt: "Felix am Schreibtisch mit Headset und Laptop", pos: "50% 40%" }] },
   { i: <IcPhone />, j: "Der Wendepunkt", t: "Nur noch eins: verkaufen lernen.", p: "Im dritten Monat zum ersten Mal 10.000 € in einem Monat. Danach den ersten Vertrieb aus dem Kinderzimmer aufgebaut.",
@@ -222,18 +223,7 @@ export default function Home() {
       <section id="sicherheit" className="section" style={{ overflow: "hidden" }}>
         <div className="motiv motiv--loewe" aria-hidden="true" style={{ opacity: 0.6 }} />
         <div className="wrap radar-block">
-          <div className="radar" aria-hidden="true" data-reveal="zoom">
-            <div className="radar__innen">
-              <div className="radar__kreuz" />
-              {[8, 20, 32].map((p) => <div key={p} className="radar__ring" style={{ inset: `${p}%` }} />)}
-              <div className="radar__strahl" />
-              <div className="radar__label" style={{ left: "60%", top: "22%" }}><i /><span>Glasfaser · geprüft</span></div>
-              <div className="radar__label" style={{ left: "18%", top: "38%" }}><i /><span>Solar · geprüft</span></div>
-              <div className="radar__label" style={{ left: "64%", top: "66%" }}><i /><span>Energie · geprüft</span></div>
-              <div className="radar__label" style={{ left: "26%", top: "72%" }}><i /><span>Versicherung · geprüft</span></div>
-              <div className="radar__mitte"><div><b>machvertrieb</b><small>Partner-Check</small></div></div>
-            </div>
-          </div>
+          <VermittlungScreen />
           <div className="head" data-reveal>
             <span className="tag">Deine Sicherheit</span>
             <h2 className="h2">Wir lassen dich nicht <span className="b">beim Falschen landen.</span></h2>
@@ -276,7 +266,7 @@ export default function Home() {
             <span className="tag">Selbst bewerben oder mit uns?</span>
             <h2 className="h2">Allein ist es <span className="b">ein Glücksspiel.</span></h2>
           </div>
-          <div className="vergleich" style={{ gridTemplateColumns: "1fr 1fr", maxWidth: 920, marginInline: "auto" }}>
+          <div className="vergleich vergleich--2">
             <div className="vergleich__col" data-reveal="links">
               <h3>Allein bewerben</h3>
               <ul>{["Du weißt nicht, ob der Vertrieb seriös ist", "Unklar, ob die Provision wirklich kommt", "Einarbeitung ist Glückssache", "Lebenslauf, Anschreiben, Vorstellungsgespräch", "Passt es nicht, ist die Chance weg"].map((t) => <li key={t}><IcX />{t}</li>)}</ul>
@@ -351,7 +341,7 @@ export default function Home() {
               <h3>Vom 500-€-Passat zum <span className="b">Porsche.</span></h3>
               <p>Keine Erbschaft, kein Startkapital. Nur Telefon, Disziplin und jeden Tag dranbleiben.</p>
             </div>
-            <div className="wand__k wand__k--hoch" data-reveal="zoom" style={{ ["--d" as string]: "160ms" }}>
+            <div className="wand__k wand__k--breit" data-reveal="zoom" style={{ ["--d" as string]: "160ms" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/img/laufbahn/cockpit.jpg" alt="Ambientebeleuchtung im Auto bei Nacht" loading="lazy" data-parallax="0.12" />
             </div>
@@ -363,9 +353,9 @@ export default function Home() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/img/laufbahn/erfolg.jpg" alt="Felix vor dem Bürogebäude" loading="lazy" style={{ objectPosition: "50% 30%" }} />
             </div>
-            <div className="wand__k wand__k--breit" data-reveal="zoom" style={{ ["--d" as string]: "240ms" }}>
+            <div className="wand__k wand__k--hoch" data-reveal="zoom" style={{ ["--d" as string]: "240ms" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/img/laufbahn/team-garage.jpg" alt="Felix mit Teammitglied vor den Firmenwagen" loading="lazy" style={{ objectPosition: "50% 60%" }} />
+              <img src="/img/laufbahn/team-garage.jpg" alt="Felix mit Teammitglied vor den Firmenwagen" loading="lazy" style={{ objectPosition: "50% 45%" }} />
               <div className="wand__label">Das Team heute</div>
             </div>
             <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "280ms" }}>
