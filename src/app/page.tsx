@@ -252,6 +252,7 @@ export default function Home() {
                 <li><i className="sitz" />Unser Sitz</li>
                 <li><i />Partner-Standort</li>
                 <li><i className="region" />Partner-Region</li>
+                <li><i className="stadt" />Vermittlung möglich</li>
               </ul>
             </div>
             <Karte />
@@ -330,37 +331,37 @@ export default function Home() {
             ))}
           </ol>
 
-          {/* Erfolgswand */}
+          {/* Erfolgswand: alle Medien im Originalformat (Hochformat), kein Beschnitt */}
           <div className="wand">
-            <div className="wand__k wand__k--video" data-reveal="zoom">
-              <video src="/img/laufbahn/hustle.mp4" poster="/img/laufbahn/hustle-poster.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="Felix telefoniert im ersten Büro" />
-              <div className="wand__label"><span className="wand__live" />Alltag im ersten Büro</div>
-            </div>
-            <div className="wand__k wand__k--text" data-reveal="zoom" style={{ ["--d" as string]: "80ms" }}>
+            <div className="wand__k wand__k--text" data-reveal="zoom">
               <span className="tag">Was Vertrieb verändert</span>
               <h3>Vom 500-€-Passat zum <span className="b">Porsche.</span></h3>
               <p>Keine Erbschaft, kein Startkapital. Nur Telefon, Disziplin und jeden Tag dranbleiben.</p>
             </div>
-            <div className="wand__k wand__k--breit" data-reveal="zoom" style={{ ["--d" as string]: "160ms" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/img/laufbahn/cockpit.jpg" alt="Ambientebeleuchtung im Auto bei Nacht" loading="lazy" data-parallax="0.12" />
+            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "60ms" }}>
+              <video src="/img/laufbahn/hustle.mp4" poster="/img/laufbahn/hustle-poster.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="Felix telefoniert im ersten Büro" />
+              <div className="wand__label"><span className="wand__live" />Alltag im ersten Büro</div>
             </div>
             <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "120ms" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/img/laufbahn/uhren.jpg" alt="Zwei Uhren am Handgelenk" loading="lazy" />
+              <img src="/img/laufbahn/cockpit.jpg" alt="Ambientebeleuchtung im Auto bei Nacht" loading="lazy" />
             </div>
-            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "200ms" }}>
+            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "180ms" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/img/laufbahn/erfolg.jpg" alt="Felix vor dem Bürogebäude" loading="lazy" style={{ objectPosition: "50% 30%" }} />
-            </div>
-            <div className="wand__k wand__k--hoch" data-reveal="zoom" style={{ ["--d" as string]: "240ms" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/img/laufbahn/team-garage.jpg" alt="Felix mit Teammitglied vor den Firmenwagen" loading="lazy" style={{ objectPosition: "50% 45%" }} />
+              <img src="/img/laufbahn/team-garage.jpg" alt="Felix mit Teammitglied vor den Firmenwagen" loading="lazy" />
               <div className="wand__label">Das Team heute</div>
             </div>
-            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "280ms" }}>
+            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "240ms" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/img/laufbahn/heute-2.jpg" alt="Felix im Büro" loading="lazy" style={{ objectPosition: "50% 25%" }} />
+              <img src="/img/laufbahn/uhren.jpg" alt="Zwei Uhren am Handgelenk" loading="lazy" />
+            </div>
+            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "300ms" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/img/laufbahn/erfolg.jpg" alt="Felix vor dem Bürogebäude" loading="lazy" />
+            </div>
+            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "360ms" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/img/laufbahn/heute-2.jpg" alt="Felix im Büro" loading="lazy" />
             </div>
           </div>
           <p className="hinweis" style={{ marginTop: 18 }}>Das ist Felix&apos; Weg, kein Einkommensversprechen.</p>

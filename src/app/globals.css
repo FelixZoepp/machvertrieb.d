@@ -961,3 +961,26 @@ html, body { overflow-x: clip; }
 .vs__logo { width: 64px; } .vs__logo img { width: 52px; height: 40px; }
 @media (max-width: 520px) { .vs__karte { grid-template-columns: 52px minmax(0, 1fr); } .vs__logo { width: 52px; height: 44px; } .vs__logo img { width: 42px; height: 32px; } .vs__schwebe--1 { top: -40px; right: -2px; } .vs__schwebe--2 { bottom: -44px; right: 4px; } .vs { padding: 48px 4px 56px; } }
 @media (max-width: 860px) { .wand > .wand__k:last-child { grid-row: span 2; } .vs__fuss small { display: none; } }
+.karte__staedte circle { fill: rgba(243,213,139,0.55); stroke: rgba(14,15,16,0.8); stroke-width: 0.8; cursor: pointer; opacity: 0; transition: opacity 0.5s ease, r 0.2s; }
+.karte--an .karte__staedte circle { opacity: 1; }
+.karte__staedte circle:hover { fill: #f3d58b; }
+.karte-legende i.stadt { width: 6px; height: 6px; background: rgba(243,213,139,0.6); box-shadow: none; }
+
+/* Erfolgswand als Masonry: Originalformate, kein Beschnitt */
+.wand { display: block; columns: 4; column-gap: 16px; grid-auto-rows: auto; }
+.wand__k { break-inside: avoid; margin-bottom: 16px; grid-column: auto !important; grid-row: auto !important; }
+.wand__k img, .wand__k video { height: auto !important; aspect-ratio: auto; }
+.wand__k video { aspect-ratio: 9 / 16; object-fit: cover; }
+.wand__k--text { min-height: 220px; }
+@media (max-width: 1000px) { .wand { columns: 3; } }
+@media (max-width: 680px) { .wand { columns: 2; column-gap: 10px; } .wand__k { margin-bottom: 10px; border-radius: 16px; } .wand__label { left: 8px; bottom: 8px; font-size: 11px; padding: 4px 9px; } .wand__k--text { padding: 16px; min-height: 0; } }
+
+/* Laufbahn-Bilder im Hochformat */
+.reise__haupt { aspect-ratio: 4 / 5; }
+.reise__medien { width: 100%; max-width: 440px; justify-self: end; }
+.reise__station--rechts .reise__medien { justify-self: start; }
+.reise__haupt img { height: 112%; margin-top: -6%; }
+@media (max-width: 860px) { .reise__medien { max-width: none; justify-self: stretch; } .reise__haupt { aspect-ratio: 4 / 5; } }
+
+/* Städte-Punkte deutlicher */
+.karte__staedte circle { fill: rgba(243,213,139,0.8); stroke-width: 1; }

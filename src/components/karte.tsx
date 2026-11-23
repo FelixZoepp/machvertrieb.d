@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BUNDESLAENDER, DEUTSCHLAND_UMRISS, KARTE_BREITE, KARTE_HOEHE, KARTE_VIEWBOX, geoZuXY } from "@/lib/deutschland-pfade";
-import { PARTNER_ORTE, PARTNER_REGIONEN, SITZ } from "@/lib/karte";
+import { PARTNER_ORTE, PARTNER_REGIONEN, SITZ, STAEDTE } from "@/lib/karte";
 
 // Deutschlandkarte: Umriss zeichnet sich beim Scrollen, Partnerpunkte erscheinen nacheinander,
 // Linien fließen vom Sitz in Berlin. Hover/Tap zeigt Ort und Branche.
@@ -21,6 +21,8 @@ export function Karte() {
     const cx = (berlin[0] + x) / 2 - (dy / len) * b, cy = (berlin[1] + y) / 2 + (dx / len) * b;
     return { ...o, i, x, y, linie: `M${berlin[0]},${berlin[1]} Q${cx.toFixed(1)},${cy.toFixed(1)} ${x},${y}` };
   }), [berlin]);
+  const partnerNamen = useMemo(() => new Set(PARTNER_ORTE.map((o) => o.ort)), []);
+  const staedte = useMemo(() => STAEDTE.filter(([n]) => !partnerNamen.has(n)).map(([n, lat, lon], i) => { const [x, y] = geoZuXY(lat, lon); return { n, x, y, i }; }), [partnerNamen]);
   const regionMitte = useMemo(() => {
     const ls = BUNDESLAENDER.filter((b) => regionen.has(b.id));
     return [ls.reduce((s, b) => s + b.mitte[0], 0) / ls.length, ls.reduce((s, b) => s + b.mitte[1], 0) / ls.length] as const;
@@ -60,6 +62,14 @@ export function Karte() {
           </g>
           <path d={DEUTSCHLAND_UMRISS} className="karte__glow" filter="url(#k-glow)" />
           <path d={DEUTSCHLAND_UMRISS} className="karte__umriss" pathLength={1} />
+          <g className="karte__staedte">
+            {staedte.map((c) => (
+              <circle key={c.n} cx={c.x} cy={c.y} r={aktiv === "s:" + c.n ? 5.5 : 3.6} style={{ transitionDelay: `${0.9 + (c.i % 40) * 0.025}s` }}
+                onPointerEnter={() => setAktiv("s:" + c.n)} onPointerLeave={() => setAktiv((a) => (a === "s:" + c.n ? null : a))} onClick={() => setAktiv("s:" + c.n)}>
+                <title>{c.n}: Vermittlung möglich</title>
+              </circle>
+            ))}
+          </g>
           <g fill="none">
             {punkte.map((p) => (
               <g key={p.ort} className="karte__linie" style={{ transitionDelay: d(START + p.i * ABSTAND) }}>
@@ -79,6 +89,10 @@ export function Karte() {
           </button>
         ))}
 
+        {aktiv?.startsWith("s:") && (() => { const c = staedte.find((x) => "s:" + x.n === aktiv); return c ? (
+          <div role="status" className="karte__tip" style={{ ...pct(Math.min(Math.max(c.x, 90), KARTE_BREITE - 90), c.y), transform: "translate(-50%, calc(-100% - 10px))" }}>
+            <b>{c.n}</b><span>Vermittlung möglich</span><small>Bewirb dich, wir suchen Partner in deiner Nähe</small>
+          </div>) : null; })()}
         {(ap || aktiv === "__region") && (
           <div role="status" className="karte__tip" style={ap ? { ...pct(Math.min(Math.max(ap.x, 90), KARTE_BREITE - 90), ap.y), transform: "translate(-50%, calc(-100% - 16px))" } : { ...pct(regionMitte[0], regionMitte[1]), transform: "translate(-50%, calc(-100% - 4px))" }}>
             <b>{ap ? ap.ort : PARTNER_REGIONEN.map((r) => r.name).join(" und ")}</b>
