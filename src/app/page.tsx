@@ -79,15 +79,16 @@ export default function Home() {
           <div className="hero2__bild"><Image src={felix} alt="Felix Zoepp, Gründer von machvertrieb.de" priority placeholder="blur" sizes="60vw" /></div>
           <div className="hero2__inhalt">
             <span className="hero2__pille">Für Quereinsteiger &amp; Vertriebler in ganz Deutschland</span>
-            <h1>Verdien endlich, <span className="serif">was du wert bist.</span></h1>
-            <p className="hero2__text">Ohne Studium, ohne Erfahrung. Wir finden den Vertrieb, der zu dir passt, bereiten dich kostenlos vor und bringen dich zum Probetag. Du musst nur noch anfangen.</p>
+            <h1>Wir bringen dich in den Vertrieb, <span className="serif">in dem 10.000 € im Monat drin sind.</span></h1>
+            <p className="hero2__text">Wir haben die Partner und das Netzwerk: über 100 Vertriebe arbeiten mit Felix&apos; System. Wir suchen den passenden für dich raus und bringen dich vorbereitet zum Probetag.</p>
             <ul className="hero2__checks">
-              <li><IcCheck />Nur seriöse Vertriebe mit fairen Provisionen</li>
+              <li><IcCheck />Geprüfte Partner aus unserem Netzwerk, kein Scam</li>
               <li><IcCheck />Kostenlose Vorbereitung, bevor du startest</li>
               <li><IcCheck />Mehrere Angebote, du entscheidest</li>
               <li><IcCheck />Vollzeit oder Teilzeit, in deiner Region</li>
             </ul>
             <div><Link href="/bewerben" className="btn btn--brand">Jetzt Vertrieb finden, der zu mir passt <Pfeil /></Link></div>
+            <small className="hero2__hinweis">Möglich, nicht garantiert: Was du verdienst, hängt von dir und deinem Einsatz ab.</small>
           </div>
           <Link href="#felix" className="hero2__felix"><i><IcPlay /></i><div><b>Felix Zoepp</b><span>Vom Zocker zum Porsche mit 23</span></div></Link>
           <div className="hero2__logos">

@@ -609,3 +609,29 @@ button { font: inherit; color: inherit; }
 .artikel-kopf { padding-top: 176px; }
 .rechtstext { padding-top: 176px; }
 @media (max-width: 600px) { .quiz-seite { padding-top: 130px; } .artikel-kopf, .rechtstext { padding-top: 150px; } }
+
+/* Hero passt sich dynamisch an die Bildschirmhöhe an */
+.hero2 { padding-top: 132px; }
+.hero2 h1 .serif { display: block; }
+.hero2__block { height: auto; min-height: clamp(500px, calc(100svh - 148px), 760px); max-height: none; }
+.hero2__inhalt { padding: clamp(24px, 4.5svh, 64px) clamp(24px, 5vw, 64px); gap: clamp(12px, 2.2svh, 22px); }
+.hero2 h1 { font-size: clamp(30px, min(3.8vw, 5.4svh), 54px); line-height: 1.06; }
+.hero2__inhalt { max-width: 780px; }
+.hero2__text { font-size: clamp(15px, 2svh, 17px); line-height: 1.55; }
+.hero2__checks { gap: clamp(6px, 1.1svh, 11px); }
+.hero2__checks li { font-size: clamp(14px, 1.8svh, 15.5px); }
+.hero2__felix { bottom: clamp(76px, 11svh, 96px); }
+.hero2__spur img { height: clamp(40px, 6svh, 56px); }
+@media (max-height: 940px) and (min-width: 901px) { .hero2__checks li:nth-child(n+3) { display: none; } }
+@media (max-height: 720px) and (min-width: 901px) { .hero2__pille { display: none; } }
+@media (max-height: 640px) and (min-width: 901px) { .hero2__text { display: none; } }
+@media (max-width: 900px) {
+  .hero2__block { height: auto; min-height: 0; max-height: none; }
+  .hero2__inhalt { padding: 28px 22px 20px; gap: 14px; }
+  .hero2 h1 { font-size: clamp(28px, 8vw, 36px); }
+  .hero2__text { font-size: 15px; }
+  .hero2__checks li:nth-child(n+3) { display: none; }
+  .hero2 { padding-top: 120px; }
+  .hero2__felix { margin: 0 22px 14px; bottom: auto; }
+}
+.hero2__hinweis { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: -6px; }
