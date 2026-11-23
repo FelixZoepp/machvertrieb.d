@@ -79,7 +79,7 @@ export default function Home() {
           <div className="hero2__bild"><Image src={felix} alt="Felix Zoepp, Gründer von machvertrieb.de" priority placeholder="blur" sizes="60vw" /></div>
           <div className="hero2__inhalt">
             <span className="hero2__pille">Für Quereinsteiger &amp; Vertriebler in ganz Deutschland</span>
-            <h1>Wir bringen dich in den Vertrieb, <span className="serif">in dem 10.000 € im Monat drin sind.</span></h1>
+            <h1>Starte im Vertrieb und verdiene <span className="serif">bis zu 10.000 € im Monat.</span></h1>
             <p className="hero2__text">Wir haben die Partner und das Netzwerk: über 100 Vertriebe arbeiten mit Felix&apos; System. Wir suchen den passenden für dich raus und bringen dich vorbereitet zum Probetag.</p>
             <ul className="hero2__checks">
               <li><IcCheck />Geprüfte Partner aus unserem Netzwerk, kein Scam</li>
