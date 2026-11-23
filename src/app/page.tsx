@@ -51,12 +51,12 @@ const KRITERIEN = [
 ];
 
 // Laufbahn-Fotos: echte Fotos nach public/img/laufbahn/ legen und hier bei "bild" eintragen (keine KI-Bilder).
-const STORY: { i: React.ReactNode; j: string; t: string; p: string; bild?: string; alt?: string }[] = [
+const STORY: { i: React.ReactNode; j: string; t: string; p: string; bild?: string; alt?: string; pos?: string }[] = [
   { i: <IcBolt />, j: "2018", t: "„Aus mir wird nichts.“", p: "Schlechte Noten, jeden Tag gezockt, kein Plan. Ich habe mir selbst gesagt, dass aus mir nichts wird." },
   { i: <IcCap />, j: "2021", t: "Studium. Gezwungenermaßen.", p: "Nebenbei Social-Media-Beiträge, Videokurse für 50 €. Eineinhalb Jahre rumgedümpelt, ohne wirklich Geld zu verdienen." },
   { i: <IcPhone />, j: "Der Wendepunkt", t: "Nur noch eins: verkaufen lernen.", p: "Im dritten Monat zum ersten Mal 10.000 € in einem Monat. Danach den ersten Vertrieb aus dem Kinderzimmer aufgebaut." },
   { i: <IcClock />, j: "2022 bis 2024", t: "14 Stunden am Tag. Fast pleite.", p: "Erstes Büro, ein kleiner Raum. Vom 500-€-Passat, der auseinandergefallen ist, zum ersten Arteon. Sechs Vollzeitkräfte und trotzdem fast pleite." },
-  { i: <IcBuilding />, j: "Ende 2024", t: "Nicht aufgegeben.", p: "Neues Büro mit 130 Quadratmetern. 2025 ein gutes Jahr, 2026 ein noch besseres." },
+  { i: <IcBuilding />, j: "Ende 2024", t: "Nicht aufgegeben.", p: "Neues Büro mit 130 Quadratmetern. 2025 ein gutes Jahr, 2026 ein noch besseres.", bild: "/img/laufbahn/buero.jpg", alt: "Lobby unseres Bürogebäudes in Berlin mit dem Zoepp-Regiestuhl", pos: "50% 48%" },
   { i: <IcCar />, j: "Heute", t: "Porsche mit 23.", p: "Über 100 Kunden, sechsstellige Monatsumsätze, über 300.000 € in Coachings investiert. Diese Chance gebe ich mit machvertrieb.de weiter.", bild: "/img/laufbahn/heute.jpg", alt: "Felix Zoepp heute" },
 ];
 
@@ -301,7 +301,7 @@ export default function Home() {
                     {s.bild && (
                       <figure className="zeitleiste__bild">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={s.bild} alt={s.alt ?? s.t} loading="lazy" data-parallax="0.08" />
+                        <img src={s.bild} alt={s.alt ?? s.t} loading="lazy" data-parallax="0.08" style={s.pos ? { objectPosition: s.pos } : undefined} />
                         <figcaption>{s.j}</figcaption>
                       </figure>
                     )}
