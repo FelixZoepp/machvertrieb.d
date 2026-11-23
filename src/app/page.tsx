@@ -50,14 +50,35 @@ const KRITERIEN = [
   { t: "Leute, die bleiben", p: "Wir schauen, wie lange Leute bei einem Partner bleiben. Hohe Fluktuation fliegt raus." },
 ];
 
-// Laufbahn-Fotos: echte Fotos nach public/img/laufbahn/ legen und hier bei "bild" eintragen (keine KI-Bilder).
-const STORY: { i: React.ReactNode; j: string; t: string; p: string; bild?: string; alt?: string; pos?: string }[] = [
-  { i: <IcBolt />, j: "2018", t: "„Aus mir wird nichts.“", p: "Schlechte Noten, jeden Tag gezockt, kein Plan. Ich habe mir selbst gesagt, dass aus mir nichts wird." },
-  { i: <IcCap />, j: "2021", t: "Studium. Gezwungenermaßen.", p: "Nebenbei Social-Media-Beiträge, Videokurse für 50 €. Eineinhalb Jahre rumgedümpelt, ohne wirklich Geld zu verdienen." },
-  { i: <IcPhone />, j: "Der Wendepunkt", t: "Nur noch eins: verkaufen lernen.", p: "Im dritten Monat zum ersten Mal 10.000 € in einem Monat. Danach den ersten Vertrieb aus dem Kinderzimmer aufgebaut." },
-  { i: <IcClock />, j: "2022 bis 2024", t: "14 Stunden am Tag. Fast pleite.", p: "Erstes Büro, ein kleiner Raum. Vom 500-€-Passat, der auseinandergefallen ist, zum ersten Arteon. Sechs Vollzeitkräfte und trotzdem fast pleite." },
-  { i: <IcBuilding />, j: "Ende 2024", t: "Nicht aufgegeben.", p: "Neues Büro mit 130 Quadratmetern. 2025 ein gutes Jahr, 2026 ein noch besseres.", bild: "/img/laufbahn/buero.jpg", alt: "Lobby unseres Bürogebäudes in Berlin mit dem Zoepp-Regiestuhl", pos: "50% 48%" },
-  { i: <IcCar />, j: "Heute", t: "Porsche mit 23.", p: "Über 100 Kunden, sechsstellige Monatsumsätze, über 300.000 € in Coachings investiert. Diese Chance gebe ich mit machvertrieb.de weiter.", bild: "/img/laufbahn/heute.jpg", alt: "Felix Zoepp heute" },
+// Laufbahn-Fotos: nur echte Fotos von Felix (public/img/laufbahn/). Erstes Medium = großes Bild, weitere = kleine Bilder.
+type Medium = { src: string; alt: string; pos?: string; video?: string; text?: string };
+const STORY: { i: React.ReactNode; j: string; t: string; p: string; medien?: Medium[] }[] = [
+  { i: <IcBolt />, j: "2018", t: "„Aus mir wird nichts.“", p: "Schlechte Noten, jeden Tag gezockt, kein Plan. Ich habe mir selbst gesagt, dass aus mir nichts wird.",
+    medien: [{ src: "/img/laufbahn/2018.jpg", alt: "Felix als Jugendlicher", pos: "50% 22%" }] },
+  { i: <IcCap />, j: "2021", t: "Studium. Gezwungenermaßen.", p: "Nebenbei Social-Media-Beiträge, Videokurse für 50 €. Eineinhalb Jahre rumgedümpelt, ohne wirklich Geld zu verdienen.",
+    medien: [{ src: "/img/laufbahn/2021.jpg", alt: "Felix am Schreibtisch mit Headset und Laptop", pos: "50% 40%" }] },
+  { i: <IcPhone />, j: "Der Wendepunkt", t: "Nur noch eins: verkaufen lernen.", p: "Im dritten Monat zum ersten Mal 10.000 € in einem Monat. Danach den ersten Vertrieb aus dem Kinderzimmer aufgebaut.",
+    medien: [{ src: "/img/laufbahn/wendepunkt.jpg", alt: "Felix in seinem Zimmer", pos: "50% 30%" }, { src: "/img/laufbahn/anzug.jpg", alt: "Felix im weißen Hemd", pos: "50% 25%" }] },
+  { i: <IcClock />, j: "2022 bis 2024", t: "14 Stunden am Tag. Fast pleite.", p: "Erstes Büro, ein kleiner Raum. Vom 500-€-Passat, der auseinandergefallen ist, zum ersten Arteon. Sechs Vollzeitkräfte und trotzdem fast pleite.",
+    medien: [
+      { src: "/img/laufbahn/hustle-poster.jpg", video: "/img/laufbahn/hustle.mp4", alt: "Felix telefoniert im ersten Büro", pos: "50% 45%" },
+      { src: "/img/laufbahn/passat.jpg", alt: "Der alte Passat in der Tiefgarage", text: "Der 500-€-Passat" },
+      { src: "/img/laufbahn/arteon.jpg", alt: "Felix' Auto bei Nacht" },
+      { src: "/img/laufbahn/erfolg.jpg", alt: "Felix vor dem Bürogebäude", pos: "50% 30%" },
+    ] },
+  { i: <IcBuilding />, j: "Ende 2024", t: "Nicht aufgegeben.", p: "Neues Büro mit 130 Quadratmetern. 2025 ein gutes Jahr, 2026 ein noch besseres.",
+    medien: [
+      { src: "/img/laufbahn/buero.jpg", alt: "Lobby unseres Bürogebäudes in Berlin mit dem Zoepp-Regiestuhl", pos: "50% 48%" },
+      { src: "/img/laufbahn/team-garage.jpg", alt: "Felix mit Teammitglied vor den Firmenwagen", pos: "50% 55%" },
+      { src: "/img/laufbahn/heute-2.jpg", alt: "Felix im Büro", pos: "50% 25%" },
+    ] },
+  { i: <IcCar />, j: "Heute", t: "Porsche mit 23.", p: "Über 100 Kunden, sechsstellige Monatsumsätze, über 300.000 € in Coachings investiert. Diese Chance gebe ich mit machvertrieb.de weiter.",
+    medien: [
+      { src: "/img/laufbahn/porsche.jpg", alt: "Felix am Steuer seines Porsche", pos: "50% 55%" },
+      { src: "/img/laufbahn/heute.jpg", alt: "Felix Zoepp heute", pos: "50% 22%" },
+      { src: "/img/laufbahn/uhren.jpg", alt: "Zwei Uhren am Handgelenk" },
+      { src: "/img/laufbahn/cockpit.jpg", alt: "Ambientebeleuchtung im Auto bei Nacht" },
+    ] },
 ];
 
 const FAQ = [
@@ -298,12 +319,29 @@ export default function Home() {
                 <li key={s.j} data-reveal={k % 2 ? "rechts" : "links"}>
                   <span className="zeitleiste__punkt">{s.i}</span>
                   <div className="zeitleiste__inhalt">
-                    {s.bild && (
-                      <figure className="zeitleiste__bild">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={s.bild} alt={s.alt ?? s.t} loading="lazy" data-parallax="0.08" style={s.pos ? { objectPosition: s.pos } : undefined} />
-                        <figcaption>{s.j}</figcaption>
-                      </figure>
+                    {s.medien && (
+                      <div className={`zeitleiste__medien${s.medien.length > 1 ? " hat-mehr" : ""}`}>
+                        <figure className="zeitleiste__bild">
+                          {s.medien[0].video ? (
+                            <video src={s.medien[0].video} poster={s.medien[0].src} autoPlay muted loop playsInline preload="none" aria-label={s.medien[0].alt} style={s.medien[0].pos ? { objectPosition: s.medien[0].pos } : undefined} />
+                          ) : (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={s.medien[0].src} alt={s.medien[0].alt} loading="lazy" data-parallax="0.08" style={s.medien[0].pos ? { objectPosition: s.medien[0].pos } : undefined} />
+                          )}
+                          <figcaption>{s.j}</figcaption>
+                        </figure>
+                        {s.medien.length > 1 && (
+                          <div className="zeitleiste__mini">
+                            {s.medien.slice(1).map((m, mi) => (
+                              <figure key={m.src} style={{ ["--mi" as string]: mi }}>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={m.src} alt={m.alt} loading="lazy" style={m.pos ? { objectPosition: m.pos } : undefined} />
+                                {m.text && <figcaption>{m.text}</figcaption>}
+                              </figure>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     )}
                     <div className="zeitleiste__jahr">{s.j}</div><h3>{s.t}</h3><p>{s.p}</p>
                   </div>
