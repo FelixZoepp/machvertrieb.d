@@ -1,7 +1,6 @@
 import type React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { alleArtikel } from "@/lib/wissen";
 import { STIMMEN } from "@/lib/stimmen";
 import { Faq, JsonLd, faqSchema } from "@/components/faq";
 import { Bento } from "@/components/bento";
@@ -61,23 +60,18 @@ const STORY: { i: React.ReactNode; j: string; t: string; p: string; medien?: Med
     medien: [{ src: "/img/laufbahn/wendepunkt.jpg", alt: "Felix in seinem Zimmer", pos: "50% 30%" }, { src: "/img/laufbahn/anzug.jpg", alt: "Felix im weißen Hemd", pos: "50% 25%" }] },
   { i: <IcClock />, j: "2022 bis 2024", t: "14 Stunden am Tag. Fast pleite.", p: "Erstes Büro, ein kleiner Raum. Vom 500-€-Passat, der auseinandergefallen ist, zum ersten Arteon. Sechs Vollzeitkräfte und trotzdem fast pleite.",
     medien: [
-      { src: "/img/laufbahn/hustle-poster.jpg", video: "/img/laufbahn/hustle.mp4", alt: "Felix telefoniert im ersten Büro", pos: "50% 45%" },
-      { src: "/img/laufbahn/passat.jpg", alt: "Der alte Passat in der Tiefgarage", text: "Der 500-€-Passat" },
-      { src: "/img/laufbahn/arteon.jpg", alt: "Felix' Auto bei Nacht" },
-      { src: "/img/laufbahn/erfolg.jpg", alt: "Felix vor dem Bürogebäude", pos: "50% 30%" },
+      { src: "/img/laufbahn/passat.jpg", alt: "Der alte Passat in der Tiefgarage", text: "Der 500-€-Passat", pos: "50% 70%" },
+      { src: "/img/laufbahn/arteon.jpg", alt: "Felix' Auto bei Nacht", pos: "50% 75%" },
     ] },
   { i: <IcBuilding />, j: "Ende 2024", t: "Nicht aufgegeben.", p: "Neues Büro mit 130 Quadratmetern. 2025 ein gutes Jahr, 2026 ein noch besseres.",
     medien: [
       { src: "/img/laufbahn/buero.jpg", alt: "Lobby unseres Bürogebäudes in Berlin mit dem Zoepp-Regiestuhl", pos: "50% 48%" },
-      { src: "/img/laufbahn/team-garage.jpg", alt: "Felix mit Teammitglied vor den Firmenwagen", pos: "50% 55%" },
-      { src: "/img/laufbahn/heute-2.jpg", alt: "Felix im Büro", pos: "50% 25%" },
+
     ] },
   { i: <IcCar />, j: "Heute", t: "Porsche mit 23.", p: "Über 100 Kunden, sechsstellige Monatsumsätze, über 300.000 € in Coachings investiert. Diese Chance gebe ich mit machvertrieb.de weiter.",
     medien: [
       { src: "/img/laufbahn/porsche.jpg", alt: "Felix am Steuer seines Porsche", pos: "50% 55%" },
       { src: "/img/laufbahn/heute.jpg", alt: "Felix Zoepp heute", pos: "50% 22%" },
-      { src: "/img/laufbahn/uhren.jpg", alt: "Zwei Uhren am Handgelenk" },
-      { src: "/img/laufbahn/cockpit.jpg", alt: "Ambientebeleuchtung im Auto bei Nacht" },
     ] },
 ];
 
@@ -93,7 +87,6 @@ const FAQ = [
 ];
 
 export default function Home() {
-  const artikel = alleArtikel().slice(0, 3);
   return (
     <>
       <JsonLd data={faqSchema(FAQ)} />
@@ -299,57 +292,89 @@ export default function Home() {
       {/* ================= FELIX ================= */}
       <section id="felix" className="section" style={{ overflow: "hidden" }}>
         <div className="motiv motiv--adler" aria-hidden="true" style={{ opacity: 0.5 }} />
-        <div className="wrap felix">
-          <div className="felix__bild" data-reveal="links">
-            <Image src={felix} alt="Felix Zoepp" placeholder="blur" sizes="(max-width: 960px) 100vw, 40vw" />
-            <div className="felix__karte"><GoldIcon name="ziel" size={44} /><div><b>Felix Zoepp</b><small>Gründer Zoepp Consulting · Initiator von machvertrieb.de</small></div></div>
-          </div>
-          <div className="head" style={{ maxWidth: "none" }}>
-            <span className="tag">Wer dahinter steht</span>
-            <h2 className="h2">Vom Zocker im Kinderzimmer <span className="b">zum Porsche mit 23.</span></h2>
-            <p className="lead">Kein reicher Papa, keine guten Noten, kein Plan. Nur die Entscheidung, verkaufen zu lernen. Genau diese Chance will Felix mit machvertrieb.de an dich weitergeben.</p>
-            <div className="zahlen">
-              <div className="zahl"><b>3.<span> Monat</span></b><small>erstmals 10.000 € in einem Monat</small></div>
-              <div className="zahl"><b>103</b><small>Vertriebe arbeiten mit seinem System</small></div>
-              <div className="zahl"><b>300k<span>+</span></b><small>€ in Coachings investiert</small></div>
-              <div className="zahl"><b>23</b><small>Jahre alt</small></div>
+        <div className="wrap">
+          <div className="felix-kopf">
+            <div className="felix__bild" data-reveal="links">
+              <Image src={felix} alt="Felix Zoepp" placeholder="blur" sizes="(max-width: 960px) 100vw, 40vw" />
+              <div className="felix__karte"><GoldIcon name="ziel" size={44} /><div><b>Felix Zoepp</b><small>Gründer Zoepp Consulting · Initiator von machvertrieb.de</small></div></div>
             </div>
-            <ol className="zeitleiste" data-progress>
-              {STORY.map((s, k) => (
-                <li key={s.j} data-reveal={k % 2 ? "rechts" : "links"}>
-                  <span className="zeitleiste__punkt">{s.i}</span>
-                  <div className="zeitleiste__inhalt">
-                    {s.medien && (
-                      <div className={`zeitleiste__medien${s.medien.length > 1 ? " hat-mehr" : ""}`}>
-                        <figure className="zeitleiste__bild">
-                          {s.medien[0].video ? (
-                            <video src={s.medien[0].video} poster={s.medien[0].src} autoPlay muted loop playsInline preload="none" aria-label={s.medien[0].alt} style={s.medien[0].pos ? { objectPosition: s.medien[0].pos } : undefined} />
-                          ) : (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img src={s.medien[0].src} alt={s.medien[0].alt} loading="lazy" data-parallax="0.08" style={s.medien[0].pos ? { objectPosition: s.medien[0].pos } : undefined} />
-                          )}
-                          <figcaption>{s.j}</figcaption>
-                        </figure>
-                        {s.medien.length > 1 && (
-                          <div className="zeitleiste__mini">
-                            {s.medien.slice(1).map((m, mi) => (
-                              <figure key={m.src} style={{ ["--mi" as string]: mi }}>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={m.src} alt={m.alt} loading="lazy" style={m.pos ? { objectPosition: m.pos } : undefined} />
-                                {m.text && <figcaption>{m.text}</figcaption>}
-                              </figure>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    <div className="zeitleiste__jahr">{s.j}</div><h3>{s.t}</h3><p>{s.p}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <p className="hinweis">Das ist Felix&apos; Weg, kein Einkommensversprechen.</p>
+            <div className="head" data-reveal="rechts" style={{ maxWidth: "none" }}>
+              <span className="tag">Wer dahinter steht</span>
+              <h2 className="h2">Vom Zocker im Kinderzimmer <span className="b">zum Porsche mit 23.</span></h2>
+              <p className="lead">Kein reicher Papa, keine guten Noten, kein Plan. Nur die Entscheidung, verkaufen zu lernen. Genau diese Chance will Felix mit machvertrieb.de an dich weitergeben.</p>
+              <div className="zahlen">
+                <div className="zahl"><b>3.<span> Monat</span></b><small>erstmals 10.000 € in einem Monat</small></div>
+                <div className="zahl"><b><Zaehler wert={103} /></b><small>Vertriebe arbeiten mit seinem System</small></div>
+                <div className="zahl"><b>300k<span>+</span></b><small>€ in Coachings investiert</small></div>
+                <div className="zahl"><b>23</b><small>Jahre alt</small></div>
+              </div>
+            </div>
           </div>
+
+          <ol className="reise" data-progress>
+            {STORY.map((s, k) => (
+              <li key={s.j} className={`reise__station${k % 2 ? " reise__station--rechts" : ""}`}>
+                <span className="reise__punkt">{s.i}</span>
+                {s.medien && (
+                  <div className="reise__medien" data-reveal="zoom" data-tilt>
+                    <figure className="reise__haupt">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={s.medien[0].src} alt={s.medien[0].alt} loading="lazy" data-parallax="0.1" style={s.medien[0].pos ? { objectPosition: s.medien[0].pos } : undefined} />
+                      {s.medien[0].text && <figcaption>{s.medien[0].text}</figcaption>}
+                    </figure>
+                    {s.medien.slice(1, 2).map((m) => (
+                      <figure key={m.src} className="reise__neben">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={m.src} alt={m.alt} loading="lazy" style={m.pos ? { objectPosition: m.pos } : undefined} />
+                        {m.text && <figcaption>{m.text}</figcaption>}
+                      </figure>
+                    ))}
+                  </div>
+                )}
+                <div className="reise__text" data-reveal={k % 2 ? "links" : "rechts"}>
+                  <span className="reise__jahr">{s.j}</span>
+                  <h3>{s.t}</h3>
+                  <p>{s.p}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          {/* Erfolgswand */}
+          <div className="wand">
+            <div className="wand__k wand__k--video" data-reveal="zoom">
+              <video src="/img/laufbahn/hustle.mp4" poster="/img/laufbahn/hustle-poster.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="Felix telefoniert im ersten Büro" />
+              <div className="wand__label"><span className="wand__live" />Alltag im ersten Büro</div>
+            </div>
+            <div className="wand__k wand__k--text" data-reveal="zoom" style={{ ["--d" as string]: "80ms" }}>
+              <span className="tag">Was Vertrieb verändert</span>
+              <h3>Vom 500-€-Passat zum <span className="b">Porsche.</span></h3>
+              <p>Keine Erbschaft, kein Startkapital. Nur Telefon, Disziplin und jeden Tag dranbleiben.</p>
+            </div>
+            <div className="wand__k wand__k--hoch" data-reveal="zoom" style={{ ["--d" as string]: "160ms" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/img/laufbahn/cockpit.jpg" alt="Ambientebeleuchtung im Auto bei Nacht" loading="lazy" data-parallax="0.12" />
+            </div>
+            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "120ms" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/img/laufbahn/uhren.jpg" alt="Zwei Uhren am Handgelenk" loading="lazy" />
+            </div>
+            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "200ms" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/img/laufbahn/erfolg.jpg" alt="Felix vor dem Bürogebäude" loading="lazy" style={{ objectPosition: "50% 30%" }} />
+            </div>
+            <div className="wand__k wand__k--breit" data-reveal="zoom" style={{ ["--d" as string]: "240ms" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/img/laufbahn/team-garage.jpg" alt="Felix mit Teammitglied vor den Firmenwagen" loading="lazy" style={{ objectPosition: "50% 60%" }} />
+              <div className="wand__label">Das Team heute</div>
+            </div>
+            <div className="wand__k" data-reveal="zoom" style={{ ["--d" as string]: "280ms" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/img/laufbahn/heute-2.jpg" alt="Felix im Büro" loading="lazy" style={{ objectPosition: "50% 25%" }} />
+            </div>
+          </div>
+          <p className="hinweis" style={{ marginTop: 18 }}>Das ist Felix&apos; Weg, kein Einkommensversprechen.</p>
+          <div className="cta-zeile"><Link href="/bewerben" className="btn btn--brand">Jetzt Vertrieb finden, der zu mir passt <Pfeil /></Link></div>
         </div>
       </section>
 
@@ -364,25 +389,6 @@ export default function Home() {
                   <video src={s.video} poster={s.poster} controls preload="none" playsInline style={{ borderRadius: 16, aspectRatio: "9 / 16", objectFit: "cover", background: "#000" }} />
                   <figcaption><h3>{s.name}</h3><p>Vorher: {s.vorher} · Heute: {s.heute}</p></figcaption>
                 </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ================= RATGEBER ================= */}
-      {artikel.length > 0 && (
-        <section className="section">
-          <div className="wrap">
-            <div className="head center" data-reveal><span className="tag">Ratgeber</span><h2 className="h2">Erst lesen, <span className="b">dann loslegen.</span></h2></div>
-            <div className="grid grid--3">
-              {artikel.map((a) => (
-                <Link key={a.slug} href={`/wissen/${a.slug}`} className="card artikel-karte">
-                  <span className="kat">{a.category} · {a.minuten} Min.</span>
-                  <h3>{a.title}</h3>
-                  <p>{a.description}</p>
-                  <span className="mehr">Weiterlesen <IcArrow width={15} height={15} style={{ verticalAlign: -3 }} /></span>
-                </Link>
               ))}
             </div>
           </div>

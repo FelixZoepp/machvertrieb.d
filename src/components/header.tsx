@@ -29,7 +29,6 @@ export function Header() {
             <Link href="/#ablauf">So läuft&apos;s</Link>
             <Link href="/#sicherheit">Sicherheit</Link>
             <Link href="/#felix">Über Felix</Link>
-            <Link href="/wissen">Ratgeber</Link>
           </nav>
           <Link href="/bewerben" className="btn btn--brand btn--sm">Vertrieb finden <Pfeil /></Link>
         </div>
