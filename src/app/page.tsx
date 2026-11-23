@@ -1,10 +1,13 @@
+import type React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { JOBS } from "@/lib/jobs";
 import { alleArtikel } from "@/lib/wissen";
 import { STIMMEN } from "@/lib/stimmen";
-import { JobsBoard } from "@/components/jobs-board";
 import { Faq, JsonLd, faqSchema } from "@/components/faq";
+import { Bento } from "@/components/bento";
+import { Karte } from "@/components/karte";
+import { LogoLeiste } from "@/components/logo-leiste";
+import { Zaehler } from "@/components/zaehler";
 import { GoldIcon, type GoldIconName } from "@/components/gold-icon";
 import { IcArrow, IcBolt, IcBuilding, IcCap, IcCar, IcCheck, IcClock, IcPhone, IcPlay, IcWallet, IcX, Pfeil } from "@/components/icons";
 import felix from "../../public/img/felix.jpg";
@@ -47,13 +50,14 @@ const KRITERIEN = [
   { t: "Leute, die bleiben", p: "Wir schauen, wie lange Leute bei einem Partner bleiben. Hohe Fluktuation fliegt raus." },
 ];
 
-const STORY = [
+// Laufbahn-Fotos: echte Fotos nach public/img/laufbahn/ legen und hier bei "bild" eintragen (keine KI-Bilder).
+const STORY: { i: React.ReactNode; j: string; t: string; p: string; bild?: string; alt?: string }[] = [
   { i: <IcBolt />, j: "2018", t: "„Aus mir wird nichts.“", p: "Schlechte Noten, jeden Tag gezockt, kein Plan. Ich habe mir selbst gesagt, dass aus mir nichts wird." },
   { i: <IcCap />, j: "2021", t: "Studium. Gezwungenermaßen.", p: "Nebenbei Social-Media-Beiträge, Videokurse für 50 €. Eineinhalb Jahre rumgedümpelt, ohne wirklich Geld zu verdienen." },
   { i: <IcPhone />, j: "Der Wendepunkt", t: "Nur noch eins: verkaufen lernen.", p: "Im dritten Monat zum ersten Mal 10.000 € in einem Monat. Danach den ersten Vertrieb aus dem Kinderzimmer aufgebaut." },
   { i: <IcClock />, j: "2022 bis 2024", t: "14 Stunden am Tag. Fast pleite.", p: "Erstes Büro, ein kleiner Raum. Vom 500-€-Passat, der auseinandergefallen ist, zum ersten Arteon. Sechs Vollzeitkräfte und trotzdem fast pleite." },
   { i: <IcBuilding />, j: "Ende 2024", t: "Nicht aufgegeben.", p: "Neues Büro mit 130 Quadratmetern. 2025 ein gutes Jahr, 2026 ein noch besseres." },
-  { i: <IcCar />, j: "Heute", t: "Porsche mit 23.", p: "Über 100 Kunden, sechsstellige Monatsumsätze, über 300.000 € in Coachings investiert. Diese Chance gebe ich mit machvertrieb.de weiter." },
+  { i: <IcCar />, j: "Heute", t: "Porsche mit 23.", p: "Über 100 Kunden, sechsstellige Monatsumsätze, über 300.000 € in Coachings investiert. Diese Chance gebe ich mit machvertrieb.de weiter.", bild: "/img/laufbahn/heute.jpg", alt: "Felix Zoepp heute" },
 ];
 
 const FAQ = [
@@ -93,14 +97,7 @@ export default function Home() {
           <Link href="#felix" className="hero2__felix"><i><IcPlay /></i><div><b>Felix Zoepp</b><span>Vom Zocker zum Porsche mit 23</span></div></Link>
           <div className="hero2__logos">
             <span>Vertriebe, die mit Felix&apos; System arbeiten:</span>
-            <div className="hero2__lauf">
-              <div className="hero2__spur">
-                {[...LOGOS, ...LOGOS].map((l, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={i} src={`/logos/${l}-weiss.png`} alt={i < LOGOS.length ? l : ""} loading="lazy" />
-                ))}
-              </div>
-            </div>
+            <LogoLeiste logos={LOGOS} />
           </div>
         </div>
       </section>
@@ -145,6 +142,19 @@ export default function Home() {
           </div>
           <p className="hinweis-klein">Was du verdienst, hängt von dir, deinem Einsatz und deinem Vertrieb ab. Wir versprechen dir kein Einkommen, aber den richtigen Start.</p>
           <div className="cta-zeile"><Link href="/bewerben" className="btn btn--brand">Jetzt Vertrieb finden, der zu mir passt <Pfeil /></Link></div>
+        </div>
+      </section>
+
+      {/* ================= BENTO ================= */}
+      <section className="section" style={{ overflow: "hidden" }}>
+        <div className="wrap">
+          <div className="head center" data-reveal>
+            <span className="tag">So fühlt sich Vertrieb an</span>
+            <h2 className="h2">Jeder Abschluss. <span className="b">Schwarz auf weiß.</span></h2>
+            <p className="lead">Keine Fantasiezahlen, sondern eine Abrechnung, auf der jeder Vertrag steht. Woche für Woche.</p>
+          </div>
+          <Bento />
+          <p className="hinweis-klein" style={{ textAlign: "center" }}>Beispielhafte Darstellung. Höhe und Takt der Provisionen hängen vom Vertrieb, der Branche und deinem Einsatz ab.</p>
         </div>
       </section>
 
@@ -198,7 +208,7 @@ export default function Home() {
       <section id="sicherheit" className="section" style={{ overflow: "hidden" }}>
         <div className="motiv motiv--loewe" aria-hidden="true" style={{ opacity: 0.6 }} />
         <div className="wrap radar-block">
-          <div className="radar" aria-hidden="true" data-reveal>
+          <div className="radar" aria-hidden="true" data-reveal="zoom">
             <div className="radar__innen">
               <div className="radar__kreuz" />
               {[8, 20, 32].map((p) => <div key={p} className="radar__ring" style={{ inset: `${p}%` }} />)}
@@ -221,6 +231,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ================= KARTE ================= */}
+      <section id="partner" className="section">
+        <div className="wrap">
+          <div className="karte-block" data-reveal="kippen">
+            <div style={{ position: "relative" }}>
+              <span className="tag">Deutschlandweit</span>
+              <h2 className="h2" style={{ marginTop: 14 }}>Aus Berlin. <span className="b">Partner in ganz Deutschland.</span></h2>
+              <p className="lead">Unser Sitz ist in der Bornitzstraße in Berlin. Von hier aus arbeiten wir mit Vertrieben in ganz Deutschland zusammen: Glasfaser, Strom und Gas, Photovoltaik, Versicherung und mehr.</p>
+              <div className="karte-zahlen">
+                <div><b><Zaehler wert={103} /></b><small>Vertriebe mit Felix&apos; System</small></div>
+                <div><b><Zaehler wert={16} /></b><small>Bundesländer erreichbar</small></div>
+                <div><b>1</b><small>Ansprechpartner für dich</small></div>
+              </div>
+              <ul className="karte-legende">
+                <li><i className="sitz" />Unser Sitz</li>
+                <li><i />Partner-Standort</li>
+                <li><i className="region" />Partner-Region</li>
+              </ul>
+            </div>
+            <Karte />
+          </div>
+        </div>
+      </section>
+
       {/* ================= VERGLEICH ================= */}
       <section className="section section--soft">
         <div className="wrap">
@@ -229,11 +263,11 @@ export default function Home() {
             <h2 className="h2">Allein ist es <span className="b">ein Glücksspiel.</span></h2>
           </div>
           <div className="vergleich" style={{ gridTemplateColumns: "1fr 1fr", maxWidth: 920, marginInline: "auto" }}>
-            <div className="vergleich__col">
+            <div className="vergleich__col" data-reveal="links">
               <h3>Allein bewerben</h3>
               <ul>{["Du weißt nicht, ob der Vertrieb seriös ist", "Unklar, ob die Provision wirklich kommt", "Einarbeitung ist Glückssache", "Lebenslauf, Anschreiben, Vorstellungsgespräch", "Passt es nicht, ist die Chance weg"].map((t) => <li key={t}><IcX />{t}</li>)}</ul>
             </div>
-            <div className="vergleich__col vergleich__col--top" style={{ transform: "none" }}>
+            <div className="vergleich__col vergleich__col--top" data-reveal="rechts">
               <h3>Über machvertrieb.de</h3>
               <ul>{["Nur geprüfte, seriöse Partner", "Klare Provisionen, die gezahlt werden", "Kostenlose Vorbereitung vor dem Start", "Kein Lebenslauf, nur Probetag", "Mehrere Angebote, du entscheidest", "Für dich kostenlos"].map((t) => <li key={t}><IcCheck />{t}</li>)}</ul>
             </div>
@@ -245,7 +279,7 @@ export default function Home() {
       <section id="felix" className="section" style={{ overflow: "hidden" }}>
         <div className="motiv motiv--adler" aria-hidden="true" style={{ opacity: 0.5 }} />
         <div className="wrap felix">
-          <div className="felix__bild" data-reveal>
+          <div className="felix__bild" data-reveal="links">
             <Image src={felix} alt="Felix Zoepp" placeholder="blur" sizes="(max-width: 960px) 100vw, 40vw" />
             <div className="felix__karte"><GoldIcon name="ziel" size={44} /><div><b>Felix Zoepp</b><small>Gründer Zoepp Consulting · Initiator von machvertrieb.de</small></div></div>
           </div>
@@ -259,11 +293,20 @@ export default function Home() {
               <div className="zahl"><b>300k<span>+</span></b><small>€ in Coachings investiert</small></div>
               <div className="zahl"><b>23</b><small>Jahre alt</small></div>
             </div>
-            <ol className="zeitleiste">
-              {STORY.map((s) => (
-                <li key={s.j} data-reveal>
+            <ol className="zeitleiste" data-progress>
+              {STORY.map((s, k) => (
+                <li key={s.j} data-reveal={k % 2 ? "rechts" : "links"}>
                   <span className="zeitleiste__punkt">{s.i}</span>
-                  <div className="zeitleiste__inhalt"><div className="zeitleiste__jahr">{s.j}</div><h3>{s.t}</h3><p>{s.p}</p></div>
+                  <div className="zeitleiste__inhalt">
+                    {s.bild && (
+                      <figure className="zeitleiste__bild">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={s.bild} alt={s.alt ?? s.t} loading="lazy" data-parallax="0.08" />
+                        <figcaption>{s.j}</figcaption>
+                      </figure>
+                    )}
+                    <div className="zeitleiste__jahr">{s.j}</div><h3>{s.t}</h3><p>{s.p}</p>
+                  </div>
                 </li>
               ))}
             </ol>
@@ -288,18 +331,6 @@ export default function Home() {
           </div>
         </section>
       )}
-
-      {/* ================= JOBS ================= */}
-      <section id="jobs" className="section section--soft">
-        <div className="wrap">
-          <div className="head" data-reveal>
-            <span className="tag">Gerade gesucht</span>
-            <h2 className="h2">Offene Stellen <span className="b">bei unseren Partnern</span></h2>
-            <p className="lead">Eine kleine Auswahl. Die meisten Stellen vergeben wir direkt, ohne dass sie hier stehen. Bewirb dich einfach, wir finden das Passende.</p>
-          </div>
-          <JobsBoard jobs={JOBS} />
-        </div>
-      </section>
 
       {/* ================= RATGEBER ================= */}
       {artikel.length > 0 && (

@@ -17,7 +17,7 @@ export function Footer() {
             <h4>Bewerber</h4>
             <ul>
               <li><Link href="/bewerben">Jetzt bewerben</Link></li>
-              <li><Link href="/#jobs">Offene Stellen</Link></li>
+              <li><Link href="/#partner">Partner-Netzwerk</Link></li>
               <li><Link href="/#ablauf">So funktioniert&apos;s</Link></li>
               <li><Link href="/#faq">Häufige Fragen</Link></li>
             </ul>
